@@ -55,13 +55,13 @@ async def handle_document(message: Message) -> None:
         await processing_msg.edit_text(f"❌ {e}\n\nPlease ensure you're uploading a valid CoC Data Export file.")
         return
 
-    if parsed.town_hall == 0:
+    if parsed.town_hall == 0 and parsed.builder_hall == 0:
         logger.warning(
-            f"Failed to parse town hall from file. "
+            f"Failed to parse town hall or builder hall from file. "
             f"User {message.from_user.id}, file {document.file_name}"
         )
         await processing_msg.edit_text(
-            "❌ Could not detect Town Hall level in this file.\n\n"
+            "❌ Could not detect Town Hall or Builder Hall in this file.\n\n"
             "Make sure you are uploading the correct JSON data export:\n"
             "Game Settings → More Settings → Data Export → Export Data\n\n"
             f"The file must contain a 'buildings' array with a Town Hall entry (data ID {TOWN_HALL_DATA_ID}).",
@@ -164,9 +164,13 @@ async def handle_document(message: Message) -> None:
             f"({next_builder['building_name']} Lvl {next_builder['target_level']})\n"
         )
 
+    th_line = f"🏰 Town Hall Level: <b>{parsed.town_hall}</b>"
+    if parsed.builder_hall:
+        th_line += f"  |  🏗️ Builder Hall: <b>{parsed.builder_hall}</b>"
+
     summary = (
         f"✅ <b>Village Imported Successfully!</b>\n\n"
-        f"🏰 Town Hall Level: <b>{parsed.town_hall}</b>\n"
+        f"{th_line}\n"
         f"📊 Progress: {bar} <b>{progress:.1f}%</b>\n"
         f"🔨 Builders: <b>{free}/{parsed.total_builders}</b> Free\n"
         f"📦 Upgrades Tracked: <b>{upgrade_count}</b>\n"
