@@ -56,9 +56,15 @@ async def handle_document(message: Message) -> None:
         return
 
     if parsed.town_hall == 0:
+        logger.warning(
+            f"Failed to parse town hall from file. "
+            f"User {message.from_user.id}, file {document.file_name}"
+        )
         await processing_msg.edit_text(
-            "❌ Could not detect Town Hall level in this file.\n"
-            "Please ensure you're uploading a valid Clash of Clans data export.",
+            "❌ Could not detect Town Hall level in this file.\n\n"
+            "تأكد من أنك ترفع ملف JSON تصدير البيانات من اللعبة:\n"
+            "الإعدادات ← إعدادات أكثر ← تصدير البيانات\n\n"
+            "إذا كان الملف صحيحاً، جرب重新 رفعه أو أرسل لي صورة من محتوى الملف لأفحصه.",
             reply_markup=back_to_menu(),
         )
         return
