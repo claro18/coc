@@ -1,0 +1,593 @@
+{
+  "buildings": {
+    "Town Hall": {
+      "max_level": 18,
+      "levels": {
+        "1": {"upgrade_time_seconds": 0, "cost": 0, "resource": "Gold", "th": 1},
+        "2": {"upgrade_time_seconds": 1800, "cost": 4000, "resource": "Gold", "th": 1},
+        "3": {"upgrade_time_seconds": 3600, "cost": 25000, "resource": "Gold", "th": 1},
+        "4": {"upgrade_time_seconds": 7200, "cost": 150000, "resource": "Gold", "th": 1},
+        "5": {"upgrade_time_seconds": 14400, "cost": 750000, "resource": "Gold", "th": 1},
+        "6": {"upgrade_time_seconds": 28800, "cost": 1200000, "resource": "Gold", "th": 2},
+        "7": {"upgrade_time_seconds": 43200, "cost": 2000000, "resource": "Gold", "th": 3},
+        "8": {"upgrade_time_seconds": 64800, "cost": 3000000, "resource": "Gold", "th": 4},
+        "9": {"upgrade_time_seconds": 86400, "cost": 4000000, "resource": "Gold", "th": 5},
+        "10": {"upgrade_time_seconds": 129600, "cost": 5000000, "resource": "Gold", "th": 6},
+        "11": {"upgrade_time_seconds": 172800, "cost": 6000000, "resource": "Gold", "th": 7},
+        "12": {"upgrade_time_seconds": 259200, "cost": 8000000, "resource": "Gold", "th": 8},
+        "13": {"upgrade_time_seconds": 345600, "cost": 10000000, "resource": "Gold", "th": 9},
+        "14": {"upgrade_time_seconds": 432000, "cost": 12000000, "resource": "Gold", "th": 10},
+        "15": {"upgrade_time_seconds": 518400, "cost": 15000000, "resource": "Gold", "th": 11},
+        "16": {"upgrade_time_seconds": 604800, "cost": 18000000, "resource": "Gold", "th": 12},
+        "17": {"upgrade_time_seconds": 691200, "cost": 20000000, "resource": "Gold", "th": 16},
+        "18": {"upgrade_time_seconds": 777600, "cost": 22000000, "resource": "Gold", "th": 17}
+      }
+    },
+    "Cannon": {
+      "max_level": 24,
+      "levels": {
+        "1": {"upgrade_time_seconds": 0, "cost": 0, "resource": "Gold", "th": 1},
+        "2": {"upgrade_time_seconds": 60, "cost": 1000, "resource": "Gold", "th": 1},
+        "3": {"upgrade_time_seconds": 600, "cost": 4000, "resource": "Gold", "th": 1},
+        "4": {"upgrade_time_seconds": 1800, "cost": 16000, "resource": "Gold", "th": 1},
+        "5": {"upgrade_time_seconds": 3600, "cost": 50000, "resource": "Gold", "th": 1},
+        "6": {"upgrade_time_seconds": 7200, "cost": 100000, "resource": "Gold", "th": 2},
+        "7": {"upgrade_time_seconds": 14400, "cost": 200000, "resource": "Gold", "th": 3},
+        "8": {"upgrade_time_seconds": 21600, "cost": 400000, "resource": "Gold", "th": 4},
+        "9": {"upgrade_time_seconds": 28800, "cost": 800000, "resource": "Gold", "th": 5},
+        "10": {"upgrade_time_seconds": 43200, "cost": 1000000, "resource": "Gold", "th": 6},
+        "11": {"upgrade_time_seconds": 57600, "cost": 1500000, "resource": "Gold", "th": 7},
+        "12": {"upgrade_time_seconds": 86400, "cost": 2000000, "resource": "Gold", "th": 8},
+        "13": {"upgrade_time_seconds": 108000, "cost": 2500000, "resource": "Gold", "th": 9},
+        "14": {"upgrade_time_seconds": 129600, "cost": 3000000, "resource": "Gold", "th": 10},
+        "15": {"upgrade_time_seconds": 172800, "cost": 4000000, "resource": "Gold", "th": 11},
+        "16": {"upgrade_time_seconds": 216000, "cost": 5000000, "resource": "Gold", "th": 12},
+        "17": {"upgrade_time_seconds": 259200, "cost": 6000000, "resource": "Gold", "th": 12},
+        "18": {"upgrade_time_seconds": 302400, "cost": 7000000, "resource": "Gold", "th": 13},
+        "19": {"upgrade_time_seconds": 345600, "cost": 8500000, "resource": "Gold", "th": 14},
+        "20": {"upgrade_time_seconds": 388800, "cost": 10000000, "resource": "Gold", "th": 15},
+        "21": {"upgrade_time_seconds": 432000, "cost": 12000000, "resource": "Gold", "th": 16},
+        "22": {"upgrade_time_seconds": 475200, "cost": 13500000, "resource": "Gold", "th": 17},
+        "23": {"upgrade_time_seconds": 518400, "cost": 15000000, "resource": "Gold", "th": 17},
+        "24": {"upgrade_time_seconds": 561600, "cost": 17000000, "resource": "Gold", "th": 18}
+      }
+    },
+    "Archer Tower": {
+      "max_level": 24,
+      "levels": {
+        "1": {"upgrade_time_seconds": 0, "cost": 0, "resource": "Gold", "th": 1},
+        "2": {"upgrade_time_seconds": 60, "cost": 2000, "resource": "Gold", "th": 1},
+        "3": {"upgrade_time_seconds": 600, "cost": 5000, "resource": "Gold", "th": 1},
+        "4": {"upgrade_time_seconds": 1800, "cost": 20000, "resource": "Gold", "th": 1},
+        "5": {"upgrade_time_seconds": 3600, "cost": 60000, "resource": "Gold", "th": 1},
+        "6": {"upgrade_time_seconds": 7200, "cost": 120000, "resource": "Gold", "th": 2},
+        "7": {"upgrade_time_seconds": 14400, "cost": 240000, "resource": "Gold", "th": 3},
+        "8": {"upgrade_time_seconds": 21600, "cost": 480000, "resource": "Gold", "th": 4},
+        "9": {"upgrade_time_seconds": 28800, "cost": 880000, "resource": "Gold", "th": 5},
+        "10": {"upgrade_time_seconds": 43200, "cost": 1200000, "resource": "Gold", "th": 6},
+        "11": {"upgrade_time_seconds": 57600, "cost": 1600000, "resource": "Gold", "th": 7},
+        "12": {"upgrade_time_seconds": 86400, "cost": 2200000, "resource": "Gold", "th": 8},
+        "13": {"upgrade_time_seconds": 108000, "cost": 2800000, "resource": "Gold", "th": 9},
+        "14": {"upgrade_time_seconds": 129600, "cost": 3500000, "resource": "Gold", "th": 10},
+        "15": {"upgrade_time_seconds": 172800, "cost": 4500000, "resource": "Gold", "th": 11},
+        "16": {"upgrade_time_seconds": 216000, "cost": 5500000, "resource": "Gold", "th": 12},
+        "17": {"upgrade_time_seconds": 259200, "cost": 6500000, "resource": "Gold", "th": 12},
+        "18": {"upgrade_time_seconds": 302400, "cost": 7500000, "resource": "Gold", "th": 13},
+        "19": {"upgrade_time_seconds": 345600, "cost": 9000000, "resource": "Gold", "th": 14},
+        "20": {"upgrade_time_seconds": 388800, "cost": 11000000, "resource": "Gold", "th": 15},
+        "21": {"upgrade_time_seconds": 432000, "cost": 13000000, "resource": "Gold", "th": 16},
+        "22": {"upgrade_time_seconds": 518400, "cost": 14500000, "resource": "Gold", "th": 17},
+        "23": {"upgrade_time_seconds": 561600, "cost": 16500000, "resource": "Gold", "th": 17},
+        "24": {"upgrade_time_seconds": 604800, "cost": 18500000, "resource": "Gold", "th": 18}
+      }
+    },
+    "Mortar": {
+      "max_level": 17,
+      "levels": {
+        "1": {"upgrade_time_seconds": 0, "cost": 0, "resource": "Gold", "th": 1},
+        "2": {"upgrade_time_seconds": 3600, "cost": 8000, "resource": "Gold", "th": 1},
+        "3": {"upgrade_time_seconds": 7200, "cost": 32000, "resource": "Gold", "th": 1},
+        "4": {"upgrade_time_seconds": 14400, "cost": 120000, "resource": "Gold", "th": 2},
+        "5": {"upgrade_time_seconds": 28800, "cost": 400000, "resource": "Gold", "th": 3},
+        "6": {"upgrade_time_seconds": 43200, "cost": 800000, "resource": "Gold", "th": 5},
+        "7": {"upgrade_time_seconds": 64800, "cost": 1200000, "resource": "Gold", "th": 6},
+        "8": {"upgrade_time_seconds": 86400, "cost": 1800000, "resource": "Gold", "th": 7},
+        "9": {"upgrade_time_seconds": 108000, "cost": 2400000, "resource": "Gold", "th": 8},
+        "10": {"upgrade_time_seconds": 129600, "cost": 3000000, "resource": "Gold", "th": 9},
+        "11": {"upgrade_time_seconds": 172800, "cost": 4000000, "resource": "Gold", "th": 10},
+        "12": {"upgrade_time_seconds": 216000, "cost": 5000000, "resource": "Gold", "th": 11},
+        "13": {"upgrade_time_seconds": 259200, "cost": 6000000, "resource": "Gold", "th": 12},
+        "14": {"upgrade_time_seconds": 302400, "cost": 7500000, "resource": "Gold", "th": 14},
+        "15": {"upgrade_time_seconds": 345600, "cost": 9000000, "resource": "Gold", "th": 15},
+        "16": {"upgrade_time_seconds": 432000, "cost": 10500000, "resource": "Gold", "th": 17},
+        "17": {"upgrade_time_seconds": 518400, "cost": 12500000, "resource": "Gold", "th": 18}
+      }
+    },
+    "Air Defense": {
+      "max_level": 15,
+      "levels": {
+        "1": {"upgrade_time_seconds": 0, "cost": 0, "resource": "Gold", "th": 1},
+        "2": {"upgrade_time_seconds": 3600, "cost": 30000, "resource": "Gold", "th": 2},
+        "3": {"upgrade_time_seconds": 7200, "cost": 80000, "resource": "Gold", "th": 3},
+        "4": {"upgrade_time_seconds": 14400, "cost": 200000, "resource": "Gold", "th": 4},
+        "5": {"upgrade_time_seconds": 28800, "cost": 500000, "resource": "Gold", "th": 5},
+        "6": {"upgrade_time_seconds": 43200, "cost": 1000000, "resource": "Gold", "th": 6},
+        "7": {"upgrade_time_seconds": 64800, "cost": 1600000, "resource": "Gold", "th": 7},
+        "8": {"upgrade_time_seconds": 86400, "cost": 2400000, "resource": "Gold", "th": 8},
+        "9": {"upgrade_time_seconds": 108000, "cost": 3200000, "resource": "Gold", "th": 9},
+        "10": {"upgrade_time_seconds": 172800, "cost": 4500000, "resource": "Gold", "th": 10},
+        "11": {"upgrade_time_seconds": 216000, "cost": 5800000, "resource": "Gold", "th": 11},
+        "12": {"upgrade_time_seconds": 259200, "cost": 7200000, "resource": "Gold", "th": 13},
+        "13": {"upgrade_time_seconds": 302400, "cost": 9000000, "resource": "Gold", "th": 14},
+        "14": {"upgrade_time_seconds": 388800, "cost": 10500000, "resource": "Gold", "th": 17},
+        "15": {"upgrade_time_seconds": 432000, "cost": 12500000, "resource": "Gold", "th": 18}
+      }
+    },
+    "Wizard Tower": {
+      "max_level": 17,
+      "levels": {
+        "1": {"upgrade_time_seconds": 0, "cost": 0, "resource": "Gold", "th": 1},
+        "2": {"upgrade_time_seconds": 3600, "cost": 20000, "resource": "Gold", "th": 2},
+        "3": {"upgrade_time_seconds": 7200, "cost": 60000, "resource": "Gold", "th": 3},
+        "4": {"upgrade_time_seconds": 14400, "cost": 180000, "resource": "Gold", "th": 4},
+        "5": {"upgrade_time_seconds": 28800, "cost": 480000, "resource": "Gold", "th": 5},
+        "6": {"upgrade_time_seconds": 43200, "cost": 880000, "resource": "Gold", "th": 6},
+        "7": {"upgrade_time_seconds": 64800, "cost": 1400000, "resource": "Gold", "th": 7},
+        "8": {"upgrade_time_seconds": 86400, "cost": 2000000, "resource": "Gold", "th": 8},
+        "9": {"upgrade_time_seconds": 108000, "cost": 2800000, "resource": "Gold", "th": 9},
+        "10": {"upgrade_time_seconds": 129600, "cost": 3600000, "resource": "Gold", "th": 10},
+        "11": {"upgrade_time_seconds": 172800, "cost": 4800000, "resource": "Gold", "th": 11},
+        "12": {"upgrade_time_seconds": 216000, "cost": 6000000, "resource": "Gold", "th": 12},
+        "13": {"upgrade_time_seconds": 259200, "cost": 7500000, "resource": "Gold", "th": 13},
+        "14": {"upgrade_time_seconds": 302400, "cost": 9000000, "resource": "Gold", "th": 14},
+        "15": {"upgrade_time_seconds": 345600, "cost": 11000000, "resource": "Gold", "th": 15},
+        "16": {"upgrade_time_seconds": 432000, "cost": 12500000, "resource": "Gold", "th": 17},
+        "17": {"upgrade_time_seconds": 518400, "cost": 14500000, "resource": "Gold", "th": 18}
+      }
+    },
+    "Hidden Tesla": {
+      "max_level": 17,
+      "levels": {
+        "1": {"upgrade_time_seconds": 0, "cost": 0, "resource": "Gold", "th": 1},
+        "2": {"upgrade_time_seconds": 7200, "cost": 50000, "resource": "Gold", "th": 4},
+        "3": {"upgrade_time_seconds": 14400, "cost": 150000, "resource": "Gold", "th": 4},
+        "4": {"upgrade_time_seconds": 28800, "cost": 400000, "resource": "Gold", "th": 5},
+        "5": {"upgrade_time_seconds": 43200, "cost": 800000, "resource": "Gold", "th": 6},
+        "6": {"upgrade_time_seconds": 64800, "cost": 1200000, "resource": "Gold", "th": 7},
+        "7": {"upgrade_time_seconds": 86400, "cost": 1800000, "resource": "Gold", "th": 8},
+        "8": {"upgrade_time_seconds": 108000, "cost": 2500000, "resource": "Gold", "th": 9},
+        "9": {"upgrade_time_seconds": 129600, "cost": 3200000, "resource": "Gold", "th": 10},
+        "10": {"upgrade_time_seconds": 172800, "cost": 4200000, "resource": "Gold", "th": 11},
+        "11": {"upgrade_time_seconds": 216000, "cost": 5500000, "resource": "Gold", "th": 12},
+        "12": {"upgrade_time_seconds": 259200, "cost": 6800000, "resource": "Gold", "th": 13},
+        "13": {"upgrade_time_seconds": 302400, "cost": 8200000, "resource": "Gold", "th": 14},
+        "14": {"upgrade_time_seconds": 345600, "cost": 10000000, "resource": "Gold", "th": 15},
+        "15": {"upgrade_time_seconds": 388800, "cost": 12000000, "resource": "Gold", "th": 16},
+        "16": {"upgrade_time_seconds": 475200, "cost": 13500000, "resource": "Gold", "th": 17},
+        "17": {"upgrade_time_seconds": 561600, "cost": 15500000, "resource": "Gold", "th": 18}
+      }
+    },
+    "Bomb Tower": {
+      "max_level": 11,
+      "levels": {
+        "1": {"upgrade_time_seconds": 0, "cost": 0, "resource": "Gold", "th": 1},
+        "2": {"upgrade_time_seconds": 14400, "cost": 100000, "resource": "Gold", "th": 5},
+        "3": {"upgrade_time_seconds": 28800, "cost": 300000, "resource": "Gold", "th": 6},
+        "4": {"upgrade_time_seconds": 43200, "cost": 600000, "resource": "Gold", "th": 7},
+        "5": {"upgrade_time_seconds": 64800, "cost": 1000000, "resource": "Gold", "th": 8},
+        "6": {"upgrade_time_seconds": 86400, "cost": 1600000, "resource": "Gold", "th": 9},
+        "7": {"upgrade_time_seconds": 129600, "cost": 2400000, "resource": "Gold", "th": 10},
+        "8": {"upgrade_time_seconds": 172800, "cost": 3600000, "resource": "Gold", "th": 12},
+        "9": {"upgrade_time_seconds": 216000, "cost": 5000000, "resource": "Gold", "th": 13},
+        "10": {"upgrade_time_seconds": 259200, "cost": 6500000, "resource": "Gold", "th": 17},
+        "11": {"upgrade_time_seconds": 302400, "cost": 8000000, "resource": "Gold", "th": 18}
+      }
+    },
+    "X-Bow": {
+      "max_level": 11,
+      "levels": {
+        "1": {"upgrade_time_seconds": 0, "cost": 0, "resource": "Gold", "th": 1},
+        "2": {"upgrade_time_seconds": 86400, "cost": 500000, "resource": "Gold", "th": 7},
+        "3": {"upgrade_time_seconds": 129600, "cost": 1000000, "resource": "Gold", "th": 7},
+        "4": {"upgrade_time_seconds": 172800, "cost": 2000000, "resource": "Gold", "th": 8},
+        "5": {"upgrade_time_seconds": 216000, "cost": 3500000, "resource": "Gold", "th": 9},
+        "6": {"upgrade_time_seconds": 259200, "cost": 5200000, "resource": "Gold", "th": 10},
+        "7": {"upgrade_time_seconds": 302400, "cost": 7000000, "resource": "Gold", "th": 11},
+        "8": {"upgrade_time_seconds": 345600, "cost": 9000000, "resource": "Gold", "th": 13},
+        "9": {"upgrade_time_seconds": 388800, "cost": 12000000, "resource": "Gold", "th": 14},
+        "10": {"upgrade_time_seconds": 432000, "cost": 14000000, "resource": "Gold", "th": 17},
+        "11": {"upgrade_time_seconds": 475200, "cost": 16500000, "resource": "Gold", "th": 18}
+      }
+    },
+    "Inferno Tower": {
+      "max_level": 10,
+      "levels": {
+        "1": {"upgrade_time_seconds": 0, "cost": 0, "resource": "Gold", "th": 1},
+        "2": {"upgrade_time_seconds": 86400, "cost": 1000000, "resource": "Gold", "th": 8},
+        "3": {"upgrade_time_seconds": 129600, "cost": 2000000, "resource": "Gold", "th": 8},
+        "4": {"upgrade_time_seconds": 172800, "cost": 3500000, "resource": "Gold", "th": 9},
+        "5": {"upgrade_time_seconds": 216000, "cost": 5200000, "resource": "Gold", "th": 10},
+        "6": {"upgrade_time_seconds": 259200, "cost": 7500000, "resource": "Gold", "th": 11},
+        "7": {"upgrade_time_seconds": 302400, "cost": 9500000, "resource": "Gold", "th": 13},
+        "8": {"upgrade_time_seconds": 345600, "cost": 12000000, "resource": "Gold", "th": 14},
+        "9": {"upgrade_time_seconds": 388800, "cost": 14000000, "resource": "Gold", "th": 17},
+        "10": {"upgrade_time_seconds": 432000, "cost": 16500000, "resource": "Gold", "th": 18}
+      }
+    },
+    "Eagle Artillery": {
+      "max_level": 8,
+      "levels": {
+        "1": {"upgrade_time_seconds": 0, "cost": 0, "resource": "Gold", "th": 1},
+        "2": {"upgrade_time_seconds": 172800, "cost": 5000000, "resource": "Gold", "th": 9},
+        "3": {"upgrade_time_seconds": 216000, "cost": 7000000, "resource": "Gold", "th": 10},
+        "4": {"upgrade_time_seconds": 259200, "cost": 9000000, "resource": "Gold", "th": 11},
+        "5": {"upgrade_time_seconds": 302400, "cost": 11000000, "resource": "Gold", "th": 12},
+        "6": {"upgrade_time_seconds": 345600, "cost": 13500000, "resource": "Gold", "th": 14},
+        "7": {"upgrade_time_seconds": 388800, "cost": 15500000, "resource": "Gold", "th": 17},
+        "8": {"upgrade_time_seconds": 432000, "cost": 18000000, "resource": "Gold", "th": 18}
+      }
+    },
+    "Scattershot": {
+      "max_level": 6,
+      "levels": {
+        "1": {"upgrade_time_seconds": 0, "cost": 0, "resource": "Gold", "th": 1},
+        "2": {"upgrade_time_seconds": 216000, "cost": 8000000, "resource": "Gold", "th": 11},
+        "3": {"upgrade_time_seconds": 259200, "cost": 10000000, "resource": "Gold", "th": 12},
+        "4": {"upgrade_time_seconds": 302400, "cost": 12000000, "resource": "Gold", "th": 14},
+        "5": {"upgrade_time_seconds": 345600, "cost": 14000000, "resource": "Gold", "th": 17},
+        "6": {"upgrade_time_seconds": 388800, "cost": 16000000, "resource": "Gold", "th": 18}
+      }
+    },
+    "Spell Tower": {
+      "max_level": 6,
+      "levels": {
+        "1": {"upgrade_time_seconds": 0, "cost": 0, "resource": "Gold", "th": 1},
+        "2": {"upgrade_time_seconds": 216000, "cost": 6000000, "resource": "Gold", "th": 12},
+        "3": {"upgrade_time_seconds": 259200, "cost": 8000000, "resource": "Gold", "th": 13},
+        "4": {"upgrade_time_seconds": 302400, "cost": 10000000, "resource": "Gold", "th": 14},
+        "5": {"upgrade_time_seconds": 345600, "cost": 12000000, "resource": "Gold", "th": 17},
+        "6": {"upgrade_time_seconds": 388800, "cost": 14000000, "resource": "Gold", "th": 18}
+      }
+    },
+    "Monolith": {
+      "max_level": 4,
+      "levels": {
+        "1": {"upgrade_time_seconds": 0, "cost": 0, "resource": "Gold", "th": 1},
+        "2": {"upgrade_time_seconds": 259200, "cost": 10000000, "resource": "Gold", "th": 13},
+        "3": {"upgrade_time_seconds": 302400, "cost": 13000000, "resource": "Gold", "th": 17},
+        "4": {"upgrade_time_seconds": 345600, "cost": 15500000, "resource": "Gold", "th": 18}
+      }
+    },
+    "Firespitter": {
+      "max_level": 2,
+      "levels": {
+        "1": {"upgrade_time_seconds": 0, "cost": 0, "resource": "Gold", "th": 1},
+        "2": {"upgrade_time_seconds": 432000, "cost": 16000000, "resource": "Gold", "th": 17},
+        "3": {"upgrade_time_seconds": 518400, "cost": 18500000, "resource": "Gold", "th": 18}
+      }
+    },
+    "Multi-Archer Tower": {
+      "max_level": 4,
+      "levels": {
+        "1": {"upgrade_time_seconds": 0, "cost": 0, "resource": "Gold", "th": 1},
+        "2": {"upgrade_time_seconds": 259200, "cost": 10000000, "resource": "Gold", "th": 17},
+        "3": {"upgrade_time_seconds": 302400, "cost": 12000000, "resource": "Gold", "th": 17},
+        "4": {"upgrade_time_seconds": 345600, "cost": 14000000, "resource": "Gold", "th": 18},
+        "5": {"upgrade_time_seconds": 388800, "cost": 16500000, "resource": "Gold", "th": 18}
+      }
+    },
+    "Ricochet Cannon": {
+      "max_level": 3,
+      "levels": {
+        "1": {"upgrade_time_seconds": 0, "cost": 0, "resource": "Gold", "th": 1},
+        "2": {"upgrade_time_seconds": 259200, "cost": 11000000, "resource": "Gold", "th": 17},
+        "3": {"upgrade_time_seconds": 302400, "cost": 13000000, "resource": "Gold", "th": 17},
+        "4": {"upgrade_time_seconds": 345600, "cost": 15500000, "resource": "Gold", "th": 18}
+      }
+    },
+    "Army Camp": {
+      "max_level": 13,
+      "levels": {
+        "1": {"upgrade_time_seconds": 0, "cost": 0, "resource": "Elixir", "th": 1},
+        "2": {"upgrade_time_seconds": 3600, "cost": 25000, "resource": "Elixir", "th": 1},
+        "3": {"upgrade_time_seconds": 7200, "cost": 80000, "resource": "Elixir", "th": 2},
+        "4": {"upgrade_time_seconds": 14400, "cost": 250000, "resource": "Elixir", "th": 4},
+        "5": {"upgrade_time_seconds": 28800, "cost": 700000, "resource": "Elixir", "th": 5},
+        "6": {"upgrade_time_seconds": 43200, "cost": 1500000, "resource": "Elixir", "th": 6},
+        "7": {"upgrade_time_seconds": 64800, "cost": 2500000, "resource": "Elixir", "th": 8},
+        "8": {"upgrade_time_seconds": 86400, "cost": 4000000, "resource": "Elixir", "th": 9},
+        "9": {"upgrade_time_seconds": 129600, "cost": 6000000, "resource": "Elixir", "th": 10},
+        "10": {"upgrade_time_seconds": 172800, "cost": 8500000, "resource": "Elixir", "th": 12},
+        "11": {"upgrade_time_seconds": 216000, "cost": 11000000, "resource": "Elixir", "th": 14},
+        "12": {"upgrade_time_seconds": 259200, "cost": 13000000, "resource": "Elixir", "th": 17},
+        "13": {"upgrade_time_seconds": 302400, "cost": 15500000, "resource": "Elixir", "th": 18}
+      }
+    },
+    "Laboratory": {
+      "max_level": 15,
+      "levels": {
+        "1": {"upgrade_time_seconds": 0, "cost": 0, "resource": "Elixir", "th": 1},
+        "2": {"upgrade_time_seconds": 7200, "cost": 15000, "resource": "Elixir", "th": 2},
+        "3": {"upgrade_time_seconds": 14400, "cost": 50000, "resource": "Elixir", "th": 3},
+        "4": {"upgrade_time_seconds": 28800, "cost": 150000, "resource": "Elixir", "th": 4},
+        "5": {"upgrade_time_seconds": 43200, "cost": 500000, "resource": "Elixir", "th": 5},
+        "6": {"upgrade_time_seconds": 64800, "cost": 1000000, "resource": "Elixir", "th": 6},
+        "7": {"upgrade_time_seconds": 86400, "cost": 1800000, "resource": "Elixir", "th": 7},
+        "8": {"upgrade_time_seconds": 129600, "cost": 3000000, "resource": "Elixir", "th": 8},
+        "9": {"upgrade_time_seconds": 172800, "cost": 4500000, "resource": "Elixir", "th": 9},
+        "10": {"upgrade_time_seconds": 216000, "cost": 6000000, "resource": "Elixir", "th": 10},
+        "11": {"upgrade_time_seconds": 259200, "cost": 8000000, "resource": "Elixir", "th": 12},
+        "12": {"upgrade_time_seconds": 302400, "cost": 10000000, "resource": "Elixir", "th": 14},
+        "13": {"upgrade_time_seconds": 345600, "cost": 13000000, "resource": "Elixir", "th": 16},
+        "14": {"upgrade_time_seconds": 388800, "cost": 15500000, "resource": "Elixir", "th": 17},
+        "15": {"upgrade_time_seconds": 432000, "cost": 18000000, "resource": "Elixir", "th": 18}
+      }
+    },
+    "Barracks": {
+      "max_level": 18,
+      "levels": {
+        "1": {"upgrade_time_seconds": 0, "cost": 0, "resource": "Elixir", "th": 1},
+        "2": {"upgrade_time_seconds": 600, "cost": 2000, "resource": "Elixir", "th": 1},
+        "3": {"upgrade_time_seconds": 1800, "cost": 5000, "resource": "Elixir", "th": 1},
+        "4": {"upgrade_time_seconds": 3600, "cost": 20000, "resource": "Elixir", "th": 1},
+        "5": {"upgrade_time_seconds": 7200, "cost": 80000, "resource": "Elixir", "th": 2},
+        "6": {"upgrade_time_seconds": 14400, "cost": 200000, "resource": "Elixir", "th": 3},
+        "7": {"upgrade_time_seconds": 21600, "cost": 500000, "resource": "Elixir", "th": 4},
+        "8": {"upgrade_time_seconds": 28800, "cost": 1000000, "resource": "Elixir", "th": 6},
+        "9": {"upgrade_time_seconds": 43200, "cost": 1800000, "resource": "Elixir", "th": 7},
+        "10": {"upgrade_time_seconds": 64800, "cost": 2800000, "resource": "Elixir", "th": 8},
+        "11": {"upgrade_time_seconds": 86400, "cost": 4000000, "resource": "Elixir", "th": 9},
+        "12": {"upgrade_time_seconds": 108000, "cost": 5500000, "resource": "Elixir", "th": 10},
+        "13": {"upgrade_time_seconds": 129600, "cost": 7000000, "resource": "Elixir", "th": 11},
+        "14": {"upgrade_time_seconds": 172800, "cost": 9000000, "resource": "Elixir", "th": 13},
+        "15": {"upgrade_time_seconds": 216000, "cost": 11000000, "resource": "Elixir", "th": 14},
+        "16": {"upgrade_time_seconds": 259200, "cost": 13500000, "resource": "Elixir", "th": 16},
+        "17": {"upgrade_time_seconds": 302400, "cost": 15500000, "resource": "Elixir", "th": 17},
+        "18": {"upgrade_time_seconds": 345600, "cost": 18000000, "resource": "Elixir", "th": 18}
+      }
+    },
+    "Dark Barracks": {
+      "max_level": 12,
+      "levels": {
+        "1": {"upgrade_time_seconds": 0, "cost": 0, "resource": "Elixir", "th": 1},
+        "2": {"upgrade_time_seconds": 3600, "cost": 100000, "resource": "Elixir", "th": 5},
+        "3": {"upgrade_time_seconds": 14400, "cost": 300000, "resource": "Elixir", "th": 5},
+        "4": {"upgrade_time_seconds": 28800, "cost": 600000, "resource": "Elixir", "th": 6},
+        "5": {"upgrade_time_seconds": 43200, "cost": 1200000, "resource": "Elixir", "th": 7},
+        "6": {"upgrade_time_seconds": 64800, "cost": 2000000, "resource": "Elixir", "th": 8},
+        "7": {"upgrade_time_seconds": 86400, "cost": 3000000, "resource": "Elixir", "th": 9},
+        "8": {"upgrade_time_seconds": 129600, "cost": 4500000, "resource": "Elixir", "th": 10},
+        "9": {"upgrade_time_seconds": 172800, "cost": 6000000, "resource": "Elixir", "th": 12},
+        "10": {"upgrade_time_seconds": 216000, "cost": 8500000, "resource": "Elixir", "th": 14},
+        "11": {"upgrade_time_seconds": 259200, "cost": 10500000, "resource": "Elixir", "th": 17},
+        "12": {"upgrade_time_seconds": 302400, "cost": 13000000, "resource": "Elixir", "th": 18}
+      }
+    },
+    "Spell Factory": {
+      "max_level": 7,
+      "levels": {
+        "1": {"upgrade_time_seconds": 0, "cost": 0, "resource": "Elixir", "th": 1},
+        "2": {"upgrade_time_seconds": 14400, "cost": 100000, "resource": "Elixir", "th": 4},
+        "3": {"upgrade_time_seconds": 28800, "cost": 400000, "resource": "Elixir", "th": 5},
+        "4": {"upgrade_time_seconds": 43200, "cost": 1200000, "resource": "Elixir", "th": 7},
+        "5": {"upgrade_time_seconds": 64800, "cost": 2400000, "resource": "Elixir", "th": 8},
+        "6": {"upgrade_time_seconds": 86400, "cost": 4000000, "resource": "Elixir", "th": 10},
+        "7": {"upgrade_time_seconds": 129600, "cost": 6000000, "resource": "Elixir", "th": 17}
+      }
+    },
+    "Dark Spell Factory": {
+      "max_level": 6,
+      "levels": {
+        "1": {"upgrade_time_seconds": 0, "cost": 0, "resource": "Elixir", "th": 1},
+        "2": {"upgrade_time_seconds": 28800, "cost": 500000, "resource": "Elixir", "th": 6},
+        "3": {"upgrade_time_seconds": 43200, "cost": 1200000, "resource": "Elixir", "th": 7},
+        "4": {"upgrade_time_seconds": 64800, "cost": 2200000, "resource": "Elixir", "th": 8},
+        "5": {"upgrade_time_seconds": 86400, "cost": 3500000, "resource": "Elixir", "th": 10},
+        "6": {"upgrade_time_seconds": 108000, "cost": 5000000, "resource": "Elixir", "th": 17}
+      }
+    },
+    "Workshop": {
+      "max_level": 7,
+      "levels": {
+        "1": {"upgrade_time_seconds": 0, "cost": 0, "resource": "Elixir", "th": 1},
+        "2": {"upgrade_time_seconds": 86400, "cost": 2500000, "resource": "Elixir", "th": 10},
+        "3": {"upgrade_time_seconds": 129600, "cost": 4500000, "resource": "Elixir", "th": 11},
+        "4": {"upgrade_time_seconds": 172800, "cost": 6500000, "resource": "Elixir", "th": 12},
+        "5": {"upgrade_time_seconds": 216000, "cost": 9000000, "resource": "Elixir", "th": 14},
+        "6": {"upgrade_time_seconds": 259200, "cost": 11500000, "resource": "Elixir", "th": 17},
+        "7": {"upgrade_time_seconds": 302400, "cost": 14000000, "resource": "Elixir", "th": 18}
+      }
+    },
+    "Pet House": {
+      "max_level": 7,
+      "levels": {
+        "1": {"upgrade_time_seconds": 0, "cost": 0, "resource": "Elixir", "th": 1},
+        "2": {"upgrade_time_seconds": 172800, "cost": 6000000, "resource": "Elixir", "th": 11},
+        "3": {"upgrade_time_seconds": 216000, "cost": 8000000, "resource": "Elixir", "th": 12},
+        "4": {"upgrade_time_seconds": 259200, "cost": 10000000, "resource": "Elixir", "th": 13},
+        "5": {"upgrade_time_seconds": 302400, "cost": 13000000, "resource": "Elixir", "th": 14},
+        "6": {"upgrade_time_seconds": 345600, "cost": 15500000, "resource": "Elixir", "th": 17},
+        "7": {"upgrade_time_seconds": 388800, "cost": 18000000, "resource": "Elixir", "th": 18}
+      }
+    },
+    "Clan Castle": {
+      "max_level": 12,
+      "levels": {
+        "1": {"upgrade_time_seconds": 0, "cost": 0, "resource": "Gold", "th": 1},
+        "2": {"upgrade_time_seconds": 7200, "cost": 10000, "resource": "Gold", "th": 1},
+        "3": {"upgrade_time_seconds": 14400, "cost": 50000, "resource": "Gold", "th": 2},
+        "4": {"upgrade_time_seconds": 28800, "cost": 200000, "resource": "Gold", "th": 4},
+        "5": {"upgrade_time_seconds": 43200, "cost": 600000, "resource": "Gold", "th": 5},
+        "6": {"upgrade_time_seconds": 64800, "cost": 1200000, "resource": "Gold", "th": 7},
+        "7": {"upgrade_time_seconds": 86400, "cost": 2000000, "resource": "Gold", "th": 8},
+        "8": {"upgrade_time_seconds": 129600, "cost": 3000000, "resource": "Gold", "th": 9},
+        "9": {"upgrade_time_seconds": 172800, "cost": 4500000, "resource": "Gold", "th": 10},
+        "10": {"upgrade_time_seconds": 216000, "cost": 6500000, "resource": "Gold", "th": 12},
+        "11": {"upgrade_time_seconds": 259200, "cost": 9000000, "resource": "Gold", "th": 14},
+        "12": {"upgrade_time_seconds": 302400, "cost": 11500000, "resource": "Gold", "th": 17}
+      }
+    },
+    "Gold Mine": {
+      "max_level": 18,
+      "levels": {
+        "1": {"upgrade_time_seconds": 0, "cost": 0, "resource": "Gold", "th": 1},
+        "2": {"upgrade_time_seconds": 30, "cost": 200, "resource": "Gold", "th": 1},
+        "3": {"upgrade_time_seconds": 120, "cost": 500, "resource": "Gold", "th": 1},
+        "4": {"upgrade_time_seconds": 600, "cost": 1500, "resource": "Gold", "th": 1},
+        "5": {"upgrade_time_seconds": 1800, "cost": 5000, "resource": "Gold", "th": 1},
+        "6": {"upgrade_time_seconds": 3600, "cost": 12000, "resource": "Gold", "th": 2},
+        "7": {"upgrade_time_seconds": 7200, "cost": 25000, "resource": "Gold", "th": 3},
+        "8": {"upgrade_time_seconds": 14400, "cost": 50000, "resource": "Gold", "th": 4},
+        "9": {"upgrade_time_seconds": 21600, "cost": 100000, "resource": "Gold", "th": 5},
+        "10": {"upgrade_time_seconds": 28800, "cost": 200000, "resource": "Gold", "th": 6},
+        "11": {"upgrade_time_seconds": 43200, "cost": 400000, "resource": "Gold", "th": 7},
+        "12": {"upgrade_time_seconds": 64800, "cost": 700000, "resource": "Gold", "th": 8},
+        "13": {"upgrade_time_seconds": 86400, "cost": 1100000, "resource": "Gold", "th": 9},
+        "14": {"upgrade_time_seconds": 108000, "cost": 1800000, "resource": "Gold", "th": 10},
+        "15": {"upgrade_time_seconds": 129600, "cost": 2500000, "resource": "Gold", "th": 12},
+        "16": {"upgrade_time_seconds": 172800, "cost": 3500000, "resource": "Gold", "th": 14},
+        "17": {"upgrade_time_seconds": 216000, "cost": 4500000, "resource": "Gold", "th": 17},
+        "18": {"upgrade_time_seconds": 259200, "cost": 5500000, "resource": "Gold", "th": 18}
+      }
+    },
+    "Elixir Collector": {
+      "max_level": 18,
+      "levels": {
+        "1": {"upgrade_time_seconds": 0, "cost": 0, "resource": "Elixir", "th": 1},
+        "2": {"upgrade_time_seconds": 30, "cost": 200, "resource": "Elixir", "th": 1},
+        "3": {"upgrade_time_seconds": 120, "cost": 500, "resource": "Elixir", "th": 1},
+        "4": {"upgrade_time_seconds": 600, "cost": 1500, "resource": "Elixir", "th": 1},
+        "5": {"upgrade_time_seconds": 1800, "cost": 5000, "resource": "Elixir", "th": 1},
+        "6": {"upgrade_time_seconds": 3600, "cost": 12000, "resource": "Elixir", "th": 2},
+        "7": {"upgrade_time_seconds": 7200, "cost": 25000, "resource": "Elixir", "th": 3},
+        "8": {"upgrade_time_seconds": 14400, "cost": 50000, "resource": "Elixir", "th": 4},
+        "9": {"upgrade_time_seconds": 21600, "cost": 100000, "resource": "Elixir", "th": 5},
+        "10": {"upgrade_time_seconds": 28800, "cost": 200000, "resource": "Elixir", "th": 6},
+        "11": {"upgrade_time_seconds": 43200, "cost": 400000, "resource": "Elixir", "th": 7},
+        "12": {"upgrade_time_seconds": 64800, "cost": 700000, "resource": "Elixir", "th": 8},
+        "13": {"upgrade_time_seconds": 86400, "cost": 1100000, "resource": "Elixir", "th": 9},
+        "14": {"upgrade_time_seconds": 108000, "cost": 1800000, "resource": "Elixir", "th": 10},
+        "15": {"upgrade_time_seconds": 129600, "cost": 2500000, "resource": "Elixir", "th": 12},
+        "16": {"upgrade_time_seconds": 172800, "cost": 3500000, "resource": "Elixir", "th": 14},
+        "17": {"upgrade_time_seconds": 216000, "cost": 4500000, "resource": "Elixir", "th": 17},
+        "18": {"upgrade_time_seconds": 259200, "cost": 5500000, "resource": "Elixir", "th": 18}
+      }
+    },
+    "Dark Elixir Drill": {
+      "max_level": 12,
+      "levels": {
+        "1": {"upgrade_time_seconds": 0, "cost": 0, "resource": "Dark Elixir", "th": 1},
+        "2": {"upgrade_time_seconds": 3600, "cost": 5000, "resource": "Dark Elixir", "th": 6},
+        "3": {"upgrade_time_seconds": 14400, "cost": 15000, "resource": "Dark Elixir", "th": 6},
+        "4": {"upgrade_time_seconds": 28800, "cost": 40000, "resource": "Dark Elixir", "th": 7},
+        "5": {"upgrade_time_seconds": 43200, "cost": 80000, "resource": "Dark Elixir", "th": 7},
+        "6": {"upgrade_time_seconds": 64800, "cost": 150000, "resource": "Dark Elixir", "th": 8},
+        "7": {"upgrade_time_seconds": 86400, "cost": 300000, "resource": "Dark Elixir", "th": 9},
+        "8": {"upgrade_time_seconds": 108000, "cost": 500000, "resource": "Dark Elixir", "th": 10},
+        "9": {"upgrade_time_seconds": 129600, "cost": 800000, "resource": "Dark Elixir", "th": 12},
+        "10": {"upgrade_time_seconds": 172800, "cost": 1200000, "resource": "Dark Elixir", "th": 14},
+        "11": {"upgrade_time_seconds": 216000, "cost": 1800000, "resource": "Dark Elixir", "th": 17},
+        "12": {"upgrade_time_seconds": 259200, "cost": 2500000, "resource": "Dark Elixir", "th": 18}
+      }
+    },
+    "Gold Storage": {
+      "max_level": 18,
+      "levels": {
+        "1": {"upgrade_time_seconds": 0, "cost": 0, "resource": "Gold", "th": 1},
+        "2": {"upgrade_time_seconds": 600, "cost": 500, "resource": "Gold", "th": 1},
+        "3": {"upgrade_time_seconds": 1800, "cost": 2000, "resource": "Gold", "th": 1},
+        "4": {"upgrade_time_seconds": 3600, "cost": 8000, "resource": "Gold", "th": 1},
+        "5": {"upgrade_time_seconds": 7200, "cost": 20000, "resource": "Gold", "th": 1},
+        "6": {"upgrade_time_seconds": 14400, "cost": 60000, "resource": "Gold", "th": 2},
+        "7": {"upgrade_time_seconds": 21600, "cost": 150000, "resource": "Gold", "th": 3},
+        "8": {"upgrade_time_seconds": 28800, "cost": 350000, "resource": "Gold", "th": 4},
+        "9": {"upgrade_time_seconds": 43200, "cost": 700000, "resource": "Gold", "th": 5},
+        "10": {"upgrade_time_seconds": 64800, "cost": 1200000, "resource": "Gold", "th": 6},
+        "11": {"upgrade_time_seconds": 86400, "cost": 2000000, "resource": "Gold", "th": 8},
+        "12": {"upgrade_time_seconds": 108000, "cost": 3000000, "resource": "Gold", "th": 9},
+        "13": {"upgrade_time_seconds": 129600, "cost": 4500000, "resource": "Gold", "th": 10},
+        "14": {"upgrade_time_seconds": 172800, "cost": 6500000, "resource": "Gold", "th": 12},
+        "15": {"upgrade_time_seconds": 216000, "cost": 8500000, "resource": "Gold", "th": 14},
+        "16": {"upgrade_time_seconds": 259200, "cost": 11000000, "resource": "Gold", "th": 16},
+        "17": {"upgrade_time_seconds": 302400, "cost": 13500000, "resource": "Gold", "th": 17},
+        "18": {"upgrade_time_seconds": 345600, "cost": 16000000, "resource": "Gold", "th": 18}
+      }
+    },
+    "Elixir Storage": {
+      "max_level": 18,
+      "levels": {
+        "1": {"upgrade_time_seconds": 0, "cost": 0, "resource": "Elixir", "th": 1},
+        "2": {"upgrade_time_seconds": 600, "cost": 500, "resource": "Elixir", "th": 1},
+        "3": {"upgrade_time_seconds": 1800, "cost": 2000, "resource": "Elixir", "th": 1},
+        "4": {"upgrade_time_seconds": 3600, "cost": 8000, "resource": "Elixir", "th": 1},
+        "5": {"upgrade_time_seconds": 7200, "cost": 20000, "resource": "Elixir", "th": 1},
+        "6": {"upgrade_time_seconds": 14400, "cost": 60000, "resource": "Elixir", "th": 2},
+        "7": {"upgrade_time_seconds": 21600, "cost": 150000, "resource": "Elixir", "th": 3},
+        "8": {"upgrade_time_seconds": 28800, "cost": 350000, "resource": "Elixir", "th": 4},
+        "9": {"upgrade_time_seconds": 43200, "cost": 700000, "resource": "Elixir", "th": 5},
+        "10": {"upgrade_time_seconds": 64800, "cost": 1200000, "resource": "Elixir", "th": 6},
+        "11": {"upgrade_time_seconds": 86400, "cost": 2000000, "resource": "Elixir", "th": 8},
+        "12": {"upgrade_time_seconds": 108000, "cost": 3000000, "resource": "Elixir", "th": 9},
+        "13": {"upgrade_time_seconds": 129600, "cost": 4500000, "resource": "Elixir", "th": 10},
+        "14": {"upgrade_time_seconds": 172800, "cost": 6500000, "resource": "Elixir", "th": 12},
+        "15": {"upgrade_time_seconds": 216000, "cost": 8500000, "resource": "Elixir", "th": 14},
+        "16": {"upgrade_time_seconds": 259200, "cost": 11000000, "resource": "Elixir", "th": 16},
+        "17": {"upgrade_time_seconds": 302400, "cost": 13500000, "resource": "Elixir", "th": 17},
+        "18": {"upgrade_time_seconds": 345600, "cost": 16000000, "resource": "Elixir", "th": 18}
+      }
+    },
+    "Dark Elixir Storage": {
+      "max_level": 12,
+      "levels": {
+        "1": {"upgrade_time_seconds": 0, "cost": 0, "resource": "Dark Elixir", "th": 1},
+        "2": {"upgrade_time_seconds": 3600, "cost": 15000, "resource": "Dark Elixir", "th": 6},
+        "3": {"upgrade_time_seconds": 14400, "cost": 50000, "resource": "Dark Elixir", "th": 6},
+        "4": {"upgrade_time_seconds": 28800, "cost": 150000, "resource": "Dark Elixir", "th": 7},
+        "5": {"upgrade_time_seconds": 43200, "cost": 300000, "resource": "Dark Elixir", "th": 7},
+        "6": {"upgrade_time_seconds": 64800, "cost": 500000, "resource": "Dark Elixir", "th": 8},
+        "7": {"upgrade_time_seconds": 86400, "cost": 1000000, "resource": "Dark Elixir", "th": 9},
+        "8": {"upgrade_time_seconds": 108000, "cost": 2000000, "resource": "Dark Elixir", "th": 10},
+        "9": {"upgrade_time_seconds": 129600, "cost": 3500000, "resource": "Dark Elixir", "th": 12},
+        "10": {"upgrade_time_seconds": 172800, "cost": 5500000, "resource": "Dark Elixir", "th": 14},
+        "11": {"upgrade_time_seconds": 216000, "cost": 7500000, "resource": "Dark Elixir", "th": 17},
+        "12": {"upgrade_time_seconds": 259200, "cost": 9500000, "resource": "Dark Elixir", "th": 18}
+      }
+    },
+    "Walls": {
+      "max_level": 19,
+      "levels": {
+        "1": {"upgrade_time_seconds": 0, "cost": 0, "resource": "Gold", "th": 1},
+        "2": {"upgrade_time_seconds": 0, "cost": 500, "resource": "Gold", "th": 1},
+        "3": {"upgrade_time_seconds": 0, "cost": 2000, "resource": "Gold", "th": 1},
+        "4": {"upgrade_time_seconds": 0, "cost": 10000, "resource": "Gold", "th": 2},
+        "5": {"upgrade_time_seconds": 0, "cost": 50000, "resource": "Gold", "th": 3},
+        "6": {"upgrade_time_seconds": 0, "cost": 100000, "resource": "Gold", "th": 4},
+        "7": {"upgrade_time_seconds": 0, "cost": 200000, "resource": "Gold", "th": 5},
+        "8": {"upgrade_time_seconds": 0, "cost": 500000, "resource": "Gold", "th": 6},
+        "9": {"upgrade_time_seconds": 0, "cost": 1000000, "resource": "Gold", "th": 7},
+        "10": {"upgrade_time_seconds": 0, "cost": 2000000, "resource": "Gold", "th": 8},
+        "11": {"upgrade_time_seconds": 0, "cost": 3000000, "resource": "Gold", "th": 9},
+        "12": {"upgrade_time_seconds": 0, "cost": 4000000, "resource": "Gold", "th": 10},
+        "13": {"upgrade_time_seconds": 0, "cost": 5000000, "resource": "Gold", "th": 11},
+        "14": {"upgrade_time_seconds": 0, "cost": 6000000, "resource": "Gold", "th": 12},
+        "15": {"upgrade_time_seconds": 0, "cost": 7000000, "resource": "Gold", "th": 13},
+        "16": {"upgrade_time_seconds": 0, "cost": 8000000, "resource": "Gold", "th": 14},
+        "17": {"upgrade_time_seconds": 0, "cost": 9000000, "resource": "Gold", "th": 15},
+        "18": {"upgrade_time_seconds": 0, "cost": 10000000, "resource": "Gold", "th": 17},
+        "19": {"upgrade_time_seconds": 0, "cost": 11000000, "resource": "Gold", "th": 18}
+      }
+    },
+    "Builder's Hut": {
+      "max_level": 7,
+      "levels": {
+        "1": {"upgrade_time_seconds": 0, "cost": 0, "resource": "Gold", "th": 1},
+        "2": {"upgrade_time_seconds": 43200, "cost": 500000, "resource": "Gold", "th": 7},
+        "3": {"upgrade_time_seconds": 86400, "cost": 1000000, "resource": "Gold", "th": 9},
+        "4": {"upgrade_time_seconds": 129600, "cost": 2500000, "resource": "Gold", "th": 11},
+        "5": {"upgrade_time_seconds": 172800, "cost": 5000000, "resource": "Gold", "th": 13},
+        "6": {"upgrade_time_seconds": 216000, "cost": 8000000, "resource": "Gold", "th": 17},
+        "7": {"upgrade_time_seconds": 259200, "cost": 11000000, "resource": "Gold", "th": 18}
+      }
+    }
+  }
+}
