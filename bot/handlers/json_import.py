@@ -9,7 +9,7 @@ from sqlalchemy import select
 from database.connection import async_session
 from database.models import User, ActiveUpgrade
 from bot.keyboards.inline import main_menu, refresh_prompt, back_to_menu
-from bot.services.parser import parse_export, get_next_builder_free, ParseResult
+from bot.services.parser import parse_export, get_next_builder_free, ParseResult, TOWN_HALL_DATA_ID
 from bot.services.calculator import (
     calculate_th_progress,
     make_progress_bar,
@@ -64,7 +64,7 @@ async def handle_document(message: Message) -> None:
             "❌ Could not detect Town Hall level in this file.\n\n"
             "Make sure you are uploading the correct JSON data export:\n"
             "Game Settings → More Settings → Data Export → Export Data\n\n"
-            "The file must contain 'buildings' array with a Town Hall entry (data ID 1000000).",
+            f"The file must contain a 'buildings' array with a Town Hall entry (data ID {TOWN_HALL_DATA_ID}).",
             reply_markup=back_to_menu(),
         )
         return

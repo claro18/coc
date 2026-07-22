@@ -6,45 +6,62 @@ from typing import Any
 logger = logging.getLogger(__name__)
 
 BUILDING_NAMES: dict[int, str] = {
-    1000000: "Town Hall",
-    1000001: "Cannon",
-    1000002: "Archer Tower",
-    1000003: "Mortar",
-    1000004: "Air Defense",
-    1000005: "Wizard Tower",
-    1000006: "Hidden Tesla",
-    1000007: "Bomb Tower",
-    1000008: "X-Bow",
-    1000009: "Inferno Tower",
+    1000000: "Army Camp",
+    1000001: "Town Hall",
+    1000002: "Elixir Collector",
+    1000003: "Elixir Storage",
+    1000004: "Gold Mine",
+    1000005: "Gold Storage",
+    1000006: "Barracks",
+    1000007: "Laboratory",
+    1000008: "Cannon",
+    1000009: "Archer Tower",
     1000010: "Walls",
-    1000011: "Eagle Artillery",
-    1000012: "Scattershot",
-    1000013: "Spell Tower",
-    1000014: "Monolith",
+    1000011: "Wizard Tower",
+    1000012: "Air Defense",
+    1000013: "Mortar",
+    1000014: "Clan Castle",
     1000015: "Builder's Hut",
-    1000017: "Firespitter",
-    1000018: "Ricochet Cannon",
-    1000019: "Army Camp",
-    1000020: "Laboratory",
-    1000021: "Spell Factory",
-    1000022: "Dark Spell Factory",
-    1000023: "Dark Barracks",
-    1000024: "Clan Castle",
-    1000026: "Multi-Archer Tower",
-    1000027: "Gold Mine",
-    1000028: "Elixir Collector",
-    1000029: "Dark Elixir Drill",
-    1000030: "Barracks",
-    1000031: "Gold Storage",
-    1000032: "Elixir Storage",
-    1000059: "Dark Elixir Storage",
-    1000070: "Pet House",
-    1000071: "Workshop",
+    1000019: "Hidden Tesla",
+    1000020: "Spell Factory",
+    1000021: "X-Bow",
+    1000023: "Dark Elixir Drill",
+    1000024: "Dark Elixir Storage",
+    1000026: "Dark Barracks",
+    1000027: "Inferno Tower",
+    1000028: "Air Sweeper",
+    1000029: "Dark Spell Factory",
+    1000031: "Eagle Artillery",
+    1000032: "Bomb Tower",
+    1000059: "Workshop",
+    1000067: "Scattershot",
+    1000068: "Pet House",
+    1000070: "Blacksmith",
+    1000071: "Hero Hall",
+    1000072: "Spell Tower",
+    1000077: "Monolith",
+    1000079: "Multi-Gear Tower",
+    1000084: "Multi-Archer Tower",
+    1000085: "Ricochet Cannon",
+    1000089: "Firespitter",
+    1000093: "Helper Hut",
+    1000097: "Crafted Defense",
 }
+
+HERO_NAMES: dict[int, str] = {
+    28000000: "Barbarian King",
+    28000001: "Archer Queen",
+    28000002: "Grand Warden",
+    28000004: "Royal Champion",
+    28000006: "Minion Prince",
+}
+
+TOWN_HALL_DATA_ID = 1000001
 
 
 class ParseResult:
     def __init__(self) -> None:
+        self.tag: str = ""
         self.town_hall: int = 0
         self.total_builders: int = 5
         self.free_builders: int = 5
@@ -53,7 +70,46 @@ class ParseResult:
 
 
 def _resolve_building_name(data_id: int) -> str:
-    return BUILDING_NAMES.get(data_id, f"Building #{data_id}")
+    return BUILDING_NAMES.get(data_id, HERO_NAMES.get(data_id, f"Building #{data_id}"))
+
+
+def _parse_building_list(
+    entries: list[dict],
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]], int]:
+    buildings: list[dict[str, Any]] = []
+    upgrades: list[dict[str, Any]] = []
+    town_hall_lvl = 0
+
+    for b in entries:
+        if not isinstance(b, dict):
+            continue
+        data_id = b.get("data", 0)
+        lvl = b.get("lvl", 0)
+        cnt = b.get("cnt", 1)
+        timer = b.get("timer")
+
+        name = _resolve_building_name(data_id)
+
+        if data_id == TOWN_HALL_DATA_ID:
+            town_hall_lvl = max(town_hall_lvl, lvl)
+
+        if timer is not None:
+            upgrades.append({
+                "building_name": name,
+                "building_level": lvl,
+                "target_level": lvl + 1,
+                "duration_seconds_remaining": int(timer),
+                "data_id": data_id,
+            })
+
+        for _ in range(cnt):
+            buildings.append({
+                "name": name,
+                "level": lvl,
+                "data_id": data_id,
+            })
+
+    return buildings, upgrades, town_hall_lvl
 
 
 def parse_export(file_bytes: bytes) -> ParseResult:
@@ -77,69 +133,21 @@ def parse_export(file_bytes: bytes) -> ParseResult:
     if not isinstance(home_buildings, list):
         home_buildings = []
 
-    town_hall_lvl = 0
-    all_building_entries: list[dict[str, Any]] = []
-    upgrades_found: list[dict[str, Any]] = []
-
-    for b in home_buildings:
-        if not isinstance(b, dict):
-            continue
-        data_id = b.get("data", 0)
-        lvl = b.get("lvl", 0)
-        cnt = b.get("cnt", 1)
-        timer = b.get("timer")
-
-        name = _resolve_building_name(data_id)
-
-        if data_id == 1000000:
-            town_hall_lvl = max(town_hall_lvl, lvl)
-
-        if timer is not None:
-            upgrades_found.append({
-                "building_name": name,
-                "building_level": lvl,
-                "target_level": lvl + 1,
-                "duration_seconds_remaining": int(timer),
-                "data_id": data_id,
-            })
-
-        for _ in range(cnt):
-            all_building_entries.append({
-                "name": name,
-                "level": lvl,
-                "data_id": data_id,
-            })
-
     bb_buildings: list[dict] = data.get("buildings2") or []
-    if isinstance(bb_buildings, list):
-        for b in bb_buildings:
-            if not isinstance(b, dict):
-                continue
-            data_id = b.get("data", 0)
-            lvl = b.get("lvl", 0)
-            cnt = b.get("cnt", 1)
-            timer = b.get("timer")
-            name = _resolve_building_name(data_id)
+    if not isinstance(bb_buildings, list):
+        bb_buildings = []
 
-            if timer is not None:
-                upgrades_found.append({
-                    "building_name": f"{name} (BB)",
-                    "building_level": lvl,
-                    "target_level": lvl + 1,
-                    "duration_seconds_remaining": int(timer),
-                    "data_id": data_id,
-                })
+    main_buildings, main_upgrades, th_lvl = _parse_building_list(home_buildings)
+    bb_buildings_list, bb_upgrades, _ = _parse_building_list(bb_buildings)
 
-            for _ in range(cnt):
-                all_building_entries.append({
-                    "name": f"{name} (BB)" if BUILDING_NAMES.get(data_id) else name,
-                    "level": lvl,
-                    "data_id": data_id,
-                })
+    for upg in bb_upgrades:
+        upg["building_name"] = f"{upg['building_name']} (BB)"
+    for b in bb_buildings_list:
+        b["name"] = f"{b['name']} (BB)"
 
-    result.town_hall = town_hall_lvl
-    result.buildings = all_building_entries
-    result.upgrades = upgrades_found
+    result.town_hall = th_lvl
+    result.buildings = main_buildings + bb_buildings_list
+    result.upgrades = main_upgrades + bb_upgrades
 
     total_builders = data.get("totalBuilderCount") or data.get("total_builder_count")
     if total_builders is not None:
@@ -149,11 +157,11 @@ def parse_export(file_bytes: bytes) -> ParseResult:
     if free_builders is not None:
         result.free_builders = int(free_builders)
     else:
-        result.free_builders = result.total_builders - len(upgrades_found)
+        result.free_builders = result.total_builders - len(result.upgrades)
 
     logger.info(
         f"Parsed: TH={result.town_hall}, builders={result.free_builders}/{result.total_builders}, "
-        f"buildings={len(all_building_entries)}, upgrades={len(upgrades_found)}"
+        f"buildings={len(result.buildings)}, upgrades={len(result.upgrades)}"
     )
     return result
 
