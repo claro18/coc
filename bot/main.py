@@ -54,6 +54,8 @@ async def main():
     await load_pending_upgrades(bot)
     logger.info("Scheduler started with pending upgrades")
 
+    await bot.delete_webhook()
+
     WEBHOOK_URL = os.getenv("WEBHOOK_URL")
     WEBHOOK_PATH = os.getenv("WEBHOOK_PATH", "/webhook")
 
@@ -99,6 +101,26 @@ async def main():
         await server.serve()
     else:
         logger.info("Starting bot in polling mode")
+        PORT = int(os.getenv("PORT", 8000))
+
+        from fastapi import FastAPI
+        import uvicorn
+
+        health_app = FastAPI(title="Clash Tracker Health")
+
+        @health_app.get("/health")
+        async def health():
+            return {"status": "ok"}
+
+        import asyncio
+        from threading import Thread
+
+        def run_health():
+            uvicorn.run(health_app, host="0.0.0.0", port=PORT, log_level="warning")
+
+        t = Thread(target=run_health, daemon=True)
+        t.start()
+
         try:
             await dp.start_polling(bot)
         finally:
