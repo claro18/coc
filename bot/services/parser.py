@@ -5,6 +5,43 @@ from typing import Any
 
 logger = logging.getLogger(__name__)
 
+BUILDING_NAMES: dict[int, str] = {
+    1000000: "Town Hall",
+    1000001: "Cannon",
+    1000002: "Archer Tower",
+    1000003: "Mortar",
+    1000004: "Air Defense",
+    1000005: "Wizard Tower",
+    1000006: "Hidden Tesla",
+    1000007: "Bomb Tower",
+    1000008: "X-Bow",
+    1000009: "Inferno Tower",
+    1000010: "Walls",
+    1000011: "Eagle Artillery",
+    1000012: "Scattershot",
+    1000013: "Spell Tower",
+    1000014: "Monolith",
+    1000015: "Builder's Hut",
+    1000017: "Firespitter",
+    1000018: "Ricochet Cannon",
+    1000019: "Army Camp",
+    1000020: "Laboratory",
+    1000021: "Spell Factory",
+    1000022: "Dark Spell Factory",
+    1000023: "Dark Barracks",
+    1000024: "Clan Castle",
+    1000026: "Multi-Archer Tower",
+    1000027: "Gold Mine",
+    1000028: "Elixir Collector",
+    1000029: "Dark Elixir Drill",
+    1000030: "Barracks",
+    1000031: "Gold Storage",
+    1000032: "Elixir Storage",
+    1000059: "Dark Elixir Storage",
+    1000070: "Pet House",
+    1000071: "Workshop",
+}
+
 
 class ParseResult:
     def __init__(self) -> None:
@@ -15,48 +52,8 @@ class ParseResult:
         self.upgrades: list[dict[str, Any]] = []
 
 
-def _deep_get(data: dict, *keys: str, default: Any = None) -> Any:
-    for key in keys:
-        if key in data:
-            return data[key]
-    for key in keys:
-        parts = key.split(".")
-        val = data
-        for part in parts:
-            if isinstance(val, dict):
-                val = val.get(part)
-            else:
-                val = None
-                break
-        if val is not None:
-            return val
-    return default
-
-
-def _find_key_case_insensitive(data: dict, target_key: str) -> Any:
-    target_lower = target_key.lower()
-    for k, v in data.items():
-        if k.lower() == target_lower:
-            return v
-    return None
-
-
-def _search_nested(obj: Any, target_key: str, depth: int = 0) -> Any:
-    if depth > 3:
-        return None
-    if isinstance(obj, dict):
-        for k, v in obj.items():
-            if k.lower() == target_key.lower():
-                return v
-            result = _search_nested(v, target_key, depth + 1)
-            if result is not None:
-                return result
-    elif isinstance(obj, list):
-        for item in obj:
-            result = _search_nested(item, target_key, depth + 1)
-            if result is not None:
-                return result
-    return None
+def _resolve_building_name(data_id: int) -> str:
+    return BUILDING_NAMES.get(data_id, f"Building #{data_id}")
 
 
 def parse_export(file_bytes: bytes) -> ParseResult:
@@ -65,138 +62,98 @@ def parse_export(file_bytes: bytes) -> ParseResult:
     try:
         text = file_bytes.decode("utf-8-sig")
         data = json.loads(text)
-    except json.JSONDecodeError as e:
+    except (json.JSONDecodeError, UnicodeDecodeError) as e:
         logger.error(f"Invalid JSON: {e}")
         raise ValueError("Invalid JSON file")
-    except UnicodeDecodeError as e:
-        logger.error(f"Encoding error: {e}")
-        raise ValueError("Unreadable file encoding")
 
     if not isinstance(data, dict):
         raise ValueError("Invalid export file structure")
 
-    logger.info(f"Top-level JSON keys: {list(data.keys())}")
+    logger.info(f"Top-level keys in export: {list(data.keys())}")
 
-    town_hall = _deep_get(
-        data, "townHallLevel", "town_hall_level", "townhalllevel",
-        "townHall", "town_hall", "thLevel", "th_level",
-        default=None,
-    )
-    if town_hall is None:
-        town_hall = _find_key_case_insensitive(data, "townHallLevel")
-    if town_hall is None:
-        town_hall = _search_nested(data, "townHallLevel")
-    if town_hall is None:
-        town_hall = _search_nested(data, "town_hall_level")
-    if town_hall is not None:
-        result.town_hall = int(town_hall)
+    result.tag = data.get("tag", "")
 
-    total_builders = _deep_get(
-        data, "totalBuilderCount", "total_builder_count", "totalbuildercount",
-        "totalBuilders", "total_builders", "totalBuilder",
-        default=None,
-    )
+    home_buildings: list[dict] = data.get("buildings") or []
+    if not isinstance(home_buildings, list):
+        home_buildings = []
+
+    town_hall_lvl = 0
+    all_building_entries: list[dict[str, Any]] = []
+    upgrades_found: list[dict[str, Any]] = []
+
+    for b in home_buildings:
+        if not isinstance(b, dict):
+            continue
+        data_id = b.get("data", 0)
+        lvl = b.get("lvl", 0)
+        cnt = b.get("cnt", 1)
+        timer = b.get("timer")
+
+        name = _resolve_building_name(data_id)
+
+        if data_id == 1000000:
+            town_hall_lvl = max(town_hall_lvl, lvl)
+
+        if timer is not None:
+            upgrades_found.append({
+                "building_name": name,
+                "building_level": lvl,
+                "target_level": lvl + 1,
+                "duration_seconds_remaining": int(timer),
+                "data_id": data_id,
+            })
+
+        for _ in range(cnt):
+            all_building_entries.append({
+                "name": name,
+                "level": lvl,
+                "data_id": data_id,
+            })
+
+    bb_buildings: list[dict] = data.get("buildings2") or []
+    if isinstance(bb_buildings, list):
+        for b in bb_buildings:
+            if not isinstance(b, dict):
+                continue
+            data_id = b.get("data", 0)
+            lvl = b.get("lvl", 0)
+            cnt = b.get("cnt", 1)
+            timer = b.get("timer")
+            name = _resolve_building_name(data_id)
+
+            if timer is not None:
+                upgrades_found.append({
+                    "building_name": f"{name} (BB)",
+                    "building_level": lvl,
+                    "target_level": lvl + 1,
+                    "duration_seconds_remaining": int(timer),
+                    "data_id": data_id,
+                })
+
+            for _ in range(cnt):
+                all_building_entries.append({
+                    "name": f"{name} (BB)" if BUILDING_NAMES.get(data_id) else name,
+                    "level": lvl,
+                    "data_id": data_id,
+                })
+
+    result.town_hall = town_hall_lvl
+    result.buildings = all_building_entries
+    result.upgrades = upgrades_found
+
+    total_builders = data.get("totalBuilderCount") or data.get("total_builder_count")
     if total_builders is not None:
         result.total_builders = int(total_builders)
 
-    free_builders = _deep_get(
-        data, "freeBuilderCount", "free_builder_count", "freebuildercount",
-        "freeBuilders", "free_builders", "freeBuilder",
-        default=None,
-    )
+    free_builders = data.get("freeBuilderCount") or data.get("free_builder_count")
     if free_builders is not None:
         result.free_builders = int(free_builders)
     else:
-        result.free_builders = result.total_builders
+        result.free_builders = result.total_builders - len(upgrades_found)
 
-    buildings_raw = _deep_get(
-        data, "buildingItems", "building_items", "buildings",
-        "buildingItem", "building_item", "items",
-        default=[],
-    )
-    if isinstance(buildings_raw, list):
-        result.buildings = buildings_raw
-        logger.info(f"Found {len(buildings_raw)} buildings")
-    else:
-        logger.warning(f"No building list found, buildings_raw type: {type(buildings_raw)}")
-
-    parsed_upgrades: list[dict[str, Any]] = []
-
-    for b in result.buildings:
-        if not isinstance(b, dict):
-            continue
-
-        is_upgrading = (
-            b.get("isUpgrading") or b.get("is_upgrading") or
-            b.get("isActive") or b.get("upgrading") or False
-        )
-        if not is_upgrading:
-            continue
-
-        upgrade_info = b.get("upgrade") or b.get("upgradeInfo") or b.get("upgrade_info") or {}
-
-        target_level = (
-            upgrade_info.get("targetLevel") or
-            upgrade_info.get("target_level") or
-            upgrade_info.get("target") or
-            b.get("targetLevel") or
-            b.get("target_level") or
-            b.get("level", 0) + 1
-        )
-
-        duration_remaining = (
-            upgrade_info.get("durationSecondsRemaining") or
-            upgrade_info.get("duration_seconds_remaining") or
-            upgrade_info.get("remainingTime") or
-            upgrade_info.get("remaining_time") or
-            upgrade_info.get("remainingSeconds") or
-            b.get("upgradeRemainingTime") or
-            b.get("upgrade_remaining_time") or
-            0
-        )
-
-        building_name = (
-            b.get("name") or b.get("buildingName") or b.get("building_name") or
-            b.get("building") or f"Building #{b.get('id') or b.get('buildingId') or '?'}"
-        )
-
-        building_level = int(b.get("level") or b.get("buildingLevel") or b.get("building_level", 0))
-
-        parsed_upgrades.append({
-            "building_name": str(building_name),
-            "building_level": building_level,
-            "target_level": int(target_level),
-            "duration_seconds_remaining": int(duration_remaining),
-        })
-
-    upgrades_raw = _deep_get(
-        data, "upgradesInProgress", "upgrades_in_progress", "upgrades",
-        "upgradeInProgress", "activeUpgrades", "active_upgrades",
-        default=[],
-    )
-    if isinstance(upgrades_raw, list):
-        for u in upgrades_raw:
-            if isinstance(u, dict):
-                parsed_upgrades.append({
-                    "building_name": str(
-                        u.get("name") or u.get("buildingName") or u.get("building_name") or
-                        u.get("building") or "Unknown"
-                    ),
-                    "building_level": int(u.get("level") or u.get("buildingLevel") or u.get("building_level", 0)),
-                    "target_level": int(
-                        u.get("targetLevel") or u.get("target_level") or u.get("target") or 0
-                    ),
-                    "duration_seconds_remaining": int(
-                        u.get("durationSecondsRemaining") or
-                        u.get("duration_seconds_remaining") or
-                        u.get("remainingTime") or u.get("remaining_time") or 0
-                    ),
-                })
-
-    result.upgrades = parsed_upgrades
     logger.info(
         f"Parsed: TH={result.town_hall}, builders={result.free_builders}/{result.total_builders}, "
-        f"upgrades={len(parsed_upgrades)}"
+        f"buildings={len(all_building_entries)}, upgrades={len(upgrades_found)}"
     )
     return result
 

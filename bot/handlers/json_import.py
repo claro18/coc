@@ -62,9 +62,9 @@ async def handle_document(message: Message) -> None:
         )
         await processing_msg.edit_text(
             "❌ Could not detect Town Hall level in this file.\n\n"
-            "تأكد من أنك ترفع ملف JSON تصدير البيانات من اللعبة:\n"
-            "الإعدادات ← إعدادات أكثر ← تصدير البيانات\n\n"
-            "إذا كان الملف صحيحاً، جرب重新 رفعه أو أرسل لي صورة من محتوى الملف لأفحصه.",
+            "Make sure you are uploading the correct JSON data export:\n"
+            "Game Settings → More Settings → Data Export → Export Data\n\n"
+            "The file must contain 'buildings' array with a Town Hall entry (data ID 1000000).",
             reply_markup=back_to_menu(),
         )
         return
