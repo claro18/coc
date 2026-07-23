@@ -10,7 +10,7 @@ from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy import select, func
 
-from database.connection import async_session
+from database.connection import sync_session
 from database.models import User, ActiveUpgrade
 from bot.services.scheduler import get_active_job_count
 
@@ -88,19 +88,14 @@ async def verify_init_data(request: Request):
 @admin_router.get("/api/metrics")
 async def get_metrics():
     try:
-        async with async_session() as session:
-            result = await session.execute(select(func.count(User.id)))
-            total_users = result.scalar() or 0
-
-            result = await session.execute(
+        with sync_session() as session:
+            total_users = session.scalar(select(func.count(User.id))) or 0
+            active_upgrades = session.scalar(
                 select(func.count(ActiveUpgrade.id)).where(
                     ActiveUpgrade.is_completed == False
                 )
-            )
-            active_upgrades = result.scalar() or 0
-
-            result = await session.execute(select(func.count(ActiveUpgrade.id)))
-            total_upgrades = result.scalar() or 0
+            ) or 0
+            total_upgrades = session.scalar(select(func.count(ActiveUpgrade.id))) or 0
 
         return {
             "total_users": total_users,
@@ -116,11 +111,10 @@ async def get_metrics():
 @admin_router.get("/api/users")
 async def get_users():
     try:
-        async with async_session() as session:
-            result = await session.execute(
+        with sync_session() as session:
+            users = session.execute(
                 select(User).order_by(User.created_at.desc()).limit(100)
-            )
-            users = result.scalars().all()
+            ).scalars().all()
 
         return {
             "users": [
@@ -144,8 +138,8 @@ async def get_users():
 async def health():
     uptime = datetime.datetime.utcnow() - BOT_START_TIME
     try:
-        async with async_session() as session:
-            await session.execute(select(1))
+        with sync_session() as session:
+            session.execute(select(1))
             db_status = "Connected"
     except Exception:
         db_status = "Disconnected"

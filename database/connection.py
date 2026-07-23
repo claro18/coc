@@ -1,8 +1,8 @@
 import logging
 import os
-from sqlalchemy import text
+from sqlalchemy import create_engine, text
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
-from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 
 logger = logging.getLogger(__name__)
 
@@ -13,6 +13,15 @@ if DATABASE_URL.startswith("postgresql://") and "+asyncpg" not in DATABASE_URL:
 
 engine = create_async_engine(DATABASE_URL, echo=False)
 async_session = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+
+# Sync engine for thread-based web server
+_sync_db_url = os.getenv("DATABASE_URL", "sqlite:///./bot.db")
+if _sync_db_url.startswith("postgresql+asyncpg://"):
+    _sync_db_url = _sync_db_url.replace("postgresql+asyncpg://", "postgresql://", 1)
+elif _sync_db_url.startswith("sqlite+aiosqlite://"):
+    _sync_db_url = _sync_db_url.replace("sqlite+aiosqlite://", "sqlite://", 1)
+sync_engine = create_engine(_sync_db_url, echo=False, pool_pre_ping=True)
+sync_session = sessionmaker(bind=sync_engine, class_=Session)
 
 
 class Base(DeclarativeBase):
