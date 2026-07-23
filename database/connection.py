@@ -60,7 +60,10 @@ async def _migrate_add_column(conn, table: str, column: str, col_type: str) -> N
 
 async def init_db():
     async with engine.begin() as conn:
-        from database.models import User, ActiveUpgrade
+        from database.models import User, ActiveUpgrade, BroadcastMessage, BotSetting
         await conn.run_sync(Base.metadata.create_all)
         await _migrate_add_column(conn, "users", "buildings_snapshot", "TEXT")
         await _migrate_add_column(conn, "active_upgrades", "village", "TEXT DEFAULT 'home'")
+        await _migrate_add_column(conn, "users", "last_seen", "TIMESTAMP")
+        await _migrate_add_column(conn, "users", "is_banned", "BOOLEAN DEFAULT FALSE")
+        await _migrate_add_column(conn, "users", "ban_reason", "TEXT")

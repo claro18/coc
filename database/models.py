@@ -15,6 +15,9 @@ class User(Base):
     buildings_snapshot: Mapped[str | None] = mapped_column(Text, nullable=True)
     created_at: Mapped[datetime.datetime] = mapped_column(DateTime, default=datetime.datetime.utcnow)
     last_json_sync: Mapped[datetime.datetime | None] = mapped_column(DateTime, nullable=True)
+    last_seen: Mapped[datetime.datetime | None] = mapped_column(DateTime, nullable=True)
+    is_banned: Mapped[bool] = mapped_column(Boolean, default=False)
+    ban_reason: Mapped[str | None] = mapped_column(String, nullable=True)
 
     upgrades = relationship("ActiveUpgrade", back_populates="user", cascade="all, delete-orphan")
 
@@ -34,3 +37,23 @@ class ActiveUpgrade(Base):
     is_completed: Mapped[bool] = mapped_column(Boolean, default=False)
 
     user = relationship("User", back_populates="upgrades")
+
+
+class BroadcastMessage(Base):
+    __tablename__ = "broadcast_messages"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    text: Mapped[str] = mapped_column(Text)
+    admin_id: Mapped[int] = mapped_column(BigInteger)
+    status: Mapped[str] = mapped_column(String, default="pending")
+    sent_count: Mapped[int] = mapped_column(Integer, default=0)
+    failed_count: Mapped[int] = mapped_column(Integer, default=0)
+    created_at: Mapped[datetime.datetime] = mapped_column(DateTime, default=datetime.datetime.utcnow)
+    completed_at: Mapped[datetime.datetime | None] = mapped_column(DateTime, nullable=True)
+
+
+class BotSetting(Base):
+    __tablename__ = "bot_settings"
+
+    key: Mapped[str] = mapped_column(String, primary_key=True)
+    value: Mapped[str] = mapped_column(Text, default="")

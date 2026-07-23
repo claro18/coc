@@ -1,12 +1,13 @@
 import datetime
+import json
 import logging
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.jobstores.memory import MemoryJobStore
 from aiogram import Bot
-from sqlalchemy import select
+from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from database.models import ActiveUpgrade, User
+from database.models import ActiveUpgrade, User, BroadcastMessage
 from database.connection import async_session
 
 logger = logging.getLogger(__name__)
@@ -171,7 +172,66 @@ def get_active_job_count() -> int:
     return len(scheduler.get_jobs())
 
 
+async def process_pending_broadcasts(bot: Bot) -> None:
+    async with async_session() as session:
+        result = await session.execute(
+            select(BroadcastMessage).where(BroadcastMessage.status == "pending")
+            .order_by(BroadcastMessage.created_at.asc())
+            .limit(1)
+        )
+        msg = result.scalar_one_or_none()
+        if not msg:
+            return
+
+        msg.status = "sending"
+        await session.commit()
+
+        user_result = await session.execute(
+            select(User).where(User.is_banned == False)
+        )
+        users = user_result.scalars().all()
+
+    sent = 0
+    failed = 0
+    for user in users:
+        try:
+            await bot.send_message(chat_id=user.id, text=msg.text, parse_mode="HTML")
+            sent += 1
+        except Exception:
+            failed += 1
+
+    async with async_session() as session:
+        bm = await session.get(BroadcastMessage, msg.id)
+        if bm:
+            bm.status = "completed"
+            bm.sent_count = sent
+            bm.failed_count = failed
+            bm.completed_at = datetime.datetime.utcnow()
+            await session.commit()
+
+    try:
+        await bot.send_message(
+            chat_id=msg.admin_id,
+            text=f"\U0001f4e8 <b>Broadcast Complete</b>\n\n"
+                 f"\u2705 Sent: <b>{sent}</b>\n"
+                 f"\u274c Failed: <b>{failed}</b>",
+            parse_mode="HTML",
+        )
+    except Exception:
+        pass
+
+    logger.info(f"Broadcast {msg.id}: sent={sent}, failed={failed}")
+
+
 def start_scheduler():
+    scheduler.add_job(
+        process_pending_broadcasts,
+        trigger="interval",
+        seconds=10,
+        id="process_broadcasts",
+        replace_existing=True,
+        name="Process pending broadcasts",
+    )
     scheduler.start()
     logger.info("APScheduler started")
 

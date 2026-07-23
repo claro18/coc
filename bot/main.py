@@ -18,8 +18,11 @@ logging.getLogger("sqlalchemy.engine").setLevel(logging.WARNING)
 
 logger = logging.getLogger(__name__)
 
+bot_instance: "Bot | None" = None
+
 
 async def main():
+    global bot_instance
     BOT_TOKEN = os.getenv("BOT_TOKEN")
     if not BOT_TOKEN:
         logger.error("BOT_TOKEN not set in environment!")
@@ -33,20 +36,22 @@ async def main():
     from bot.handlers.start import start_router
     from bot.handlers.json_import import json_router
     from bot.handlers.admin import admin_router as bot_admin_router
-    from bot.handlers.progression import prog_router
+    from bot.middleware import BanCheckMiddleware
     from bot.services.scheduler import (
         start_scheduler,
         load_pending_upgrades,
         stop_scheduler,
     )
 
-    bot = Bot(
+    bot = bot_instance = Bot(
         token=BOT_TOKEN,
         default=DefaultBotProperties(parse_mode=ParseMode.HTML),
     )
     dp = Dispatcher()
+    dp.message.middleware(BanCheckMiddleware())
+    dp.callback_query.middleware(BanCheckMiddleware())
 
-    dp.include_routers(start_router, json_router, bot_admin_router, prog_router)
+    dp.include_routers(start_router, json_router, bot_admin_router)
 
     await init_db()
     logger.info("Database initialized")
@@ -64,6 +69,7 @@ async def main():
     from web_app.routes import admin_router as web_admin_router
 
     main_app = FastAPI(title="Clash Tracker Bot")
+    main_app.state.bot = bot
     main_app.include_router(web_admin_router)
 
     web_app_dir = os.path.join(os.path.dirname(__file__), "..", "web_app", "static")

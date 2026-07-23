@@ -15,7 +15,6 @@ def main_menu(user_id: int, admin_ids: list[int] | None = None, town_hall: int =
         InlineKeyboardButton(text="📊 Detailed Stats", callback_data="menu:stats"),
     )
     builder.row(
-        InlineKeyboardButton(text="📈 Progression", callback_data="prog:menu"),
         InlineKeyboardButton(text="📜 Upgrade History", callback_data="menu:history"),
     )
     builder.row(
@@ -28,20 +27,6 @@ def main_menu(user_id: int, admin_ids: list[int] | None = None, town_hall: int =
                 web_app=WebAppInfo(url=WEBAPP_URL),
             )
         )
-    return builder.as_markup()
-
-
-def progression_menu(town_hall: int) -> InlineKeyboardMarkup:
-    from bot.services.progression import get_visible_sections
-    builder = InlineKeyboardBuilder()
-    sections = get_visible_sections(town_hall)
-    if "laboratory" in sections:
-        builder.row(InlineKeyboardButton(text="🧪 Laboratory", callback_data="prog:lab"))
-    if "heroes" in sections:
-        builder.row(InlineKeyboardButton(text="🦸 Heroes", callback_data="prog:heroes"))
-    if "pets" in sections:
-        builder.row(InlineKeyboardButton(text="🐾 Pets", callback_data="prog:pets"))
-    builder.row(InlineKeyboardButton(text="↩️ Back to Menu", callback_data="menu:main"))
     return builder.as_markup()
 
 
