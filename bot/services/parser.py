@@ -345,7 +345,10 @@ def _parse_entries(
         cnt = b.get("cnt", 1)
         timer = b.get("timer")
 
-        name = name_map.get(data_id, f"Building #{data_id}")
+        name = name_map.get(data_id)
+        if name is None:
+            logger.warning(f"Unmapped data_id encountered: {data_id} (lvl={lvl})")
+            name = f"Building #{data_id}"
 
         if timer is not None:
             upgrades.append({

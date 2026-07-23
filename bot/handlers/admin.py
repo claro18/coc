@@ -1,4 +1,5 @@
 import datetime
+import json as json_lib
 import os
 import logging
 from aiogram import Router, F
@@ -96,7 +97,8 @@ async def callback_stats(callback: CallbackQuery) -> None:
     completed = sum(1 for u in all_upgrades if u.is_completed)
     active = total - completed
 
-    progress = calculate_th_progress(user.town_hall, [])
+    buildings = json_lib.loads(user.buildings_snapshot) if user.buildings_snapshot else []
+    progress = calculate_th_progress(user.town_hall, buildings)
     bar = make_progress_bar(progress)
 
     last_sync = "Never"

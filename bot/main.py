@@ -56,22 +56,38 @@ async def main():
 
     await bot.delete_webhook()
 
+    from fastapi import FastAPI
+    from fastapi.staticfiles import StaticFiles
+    import uvicorn
+
+    from web_app.routes import admin_router as web_admin_router
+
+    main_app = FastAPI(title="Clash Tracker Bot")
+    main_app.include_router(web_admin_router)
+
+    web_app_dir = os.path.join(os.path.dirname(__file__), "..", "web_app", "static")
+    web_app_dir = os.path.normpath(web_app_dir)
+    if os.path.isdir(web_app_dir):
+        main_app.mount(
+            "/static",
+            StaticFiles(directory=web_app_dir),
+            name="admin_static",
+        )
+
+    @main_app.get("/health")
+    async def health():
+        return {"status": "ok"}
+
     WEBHOOK_URL = os.getenv("WEBHOOK_URL")
     WEBHOOK_PATH = os.getenv("WEBHOOK_PATH", "/webhook")
 
     if WEBHOOK_URL:
+        from fastapi import Request
+        from fastapi.responses import JSONResponse
+
         webhook_url = f"{WEBHOOK_URL.rstrip('/')}{WEBHOOK_PATH}"
         await bot.set_webhook(url=webhook_url)
         logger.info(f"Webhook set to {webhook_url}")
-
-        from fastapi import FastAPI, Request
-        from fastapi.responses import JSONResponse
-        from fastapi.staticfiles import StaticFiles
-        import uvicorn
-
-        from web_app.routes import admin_router as web_admin_router
-
-        main_app = FastAPI(title="Clash Tracker Bot")
 
         @main_app.post(WEBHOOK_PATH)
         async def webhook(request: Request) -> JSONResponse:
@@ -79,23 +95,7 @@ async def main():
             await dp.feed_webhook_update(bot, update_data)
             return JSONResponse(content={"ok": True})
 
-        @main_app.get("/health")
-        async def health():
-            return {"status": "ok"}
-
-        web_app_dir = os.path.join(os.path.dirname(__file__), "..", "web_app", "static")
-        web_app_dir = os.path.normpath(web_app_dir)
-        if os.path.isdir(web_app_dir):
-            main_app.mount(
-                "/static",
-                StaticFiles(directory=web_app_dir),
-                name="admin_static",
-            )
-
-        main_app.include_router(web_admin_router)
-
         PORT = int(os.getenv("PORT", 8000))
-        logger.info(f"Starting web server on port {PORT}")
         config = uvicorn.Config(main_app, host="0.0.0.0", port=PORT, log_level="info")
         server = uvicorn.Server(config)
         await server.serve()
@@ -103,22 +103,12 @@ async def main():
         logger.info("Starting bot in polling mode")
         PORT = int(os.getenv("PORT", 8000))
 
-        from fastapi import FastAPI
-        import uvicorn
-
-        health_app = FastAPI(title="Clash Tracker Health")
-
-        @health_app.get("/health")
-        async def health():
-            return {"status": "ok"}
-
-        import asyncio
         from threading import Thread
 
-        def run_health():
-            uvicorn.run(health_app, host="0.0.0.0", port=PORT, log_level="warning")
+        def run_web():
+            uvicorn.run(main_app, host="0.0.0.0", port=PORT, log_level="warning")
 
-        t = Thread(target=run_health, daemon=True)
+        t = Thread(target=run_web, daemon=True)
         t.start()
 
         try:

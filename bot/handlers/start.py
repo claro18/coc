@@ -1,4 +1,5 @@
 import datetime
+import json as json_lib
 import os
 import logging
 from aiogram import Router, F
@@ -50,7 +51,8 @@ async def build_status_text(user: User) -> tuple[str, bool]:
         )
         return text, has_data
 
-    progress = calculate_th_progress(user.town_hall, [])
+    buildings = json_lib.loads(user.buildings_snapshot) if user.buildings_snapshot else []
+    progress = calculate_th_progress(user.town_hall, buildings)
     bar = make_progress_bar(progress)
 
     busy_builders = len(active_upgrades)

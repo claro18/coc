@@ -1,5 +1,5 @@
 import datetime
-from sqlalchemy import BigInteger, String, Integer, Boolean, DateTime, ForeignKey
+from sqlalchemy import BigInteger, String, Integer, Boolean, DateTime, ForeignKey, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from database.connection import Base
 
@@ -12,6 +12,7 @@ class User(Base):
     tag: Mapped[str | None] = mapped_column(String, nullable=True)
     town_hall: Mapped[int] = mapped_column(Integer, default=0)
     total_builders: Mapped[int] = mapped_column(Integer, default=5)
+    buildings_snapshot: Mapped[str | None] = mapped_column(Text, nullable=True)
     created_at: Mapped[datetime.datetime] = mapped_column(DateTime, default=datetime.datetime.utcnow)
     last_json_sync: Mapped[datetime.datetime | None] = mapped_column(DateTime, nullable=True)
 

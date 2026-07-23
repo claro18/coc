@@ -1,5 +1,6 @@
 import datetime
 import io
+import json as json_lib
 import logging
 import os
 from aiogram import Router, F
@@ -91,9 +92,11 @@ async def handle_document(message: Message) -> None:
         else:
             user.town_hall = parsed.town_hall
             user.total_builders = parsed.total_builders
+            user.buildings_snapshot = json_lib.dumps(parsed.buildings)
             user.last_json_sync = now
             if username:
                 user.username = username
+        user.buildings_snapshot = json_lib.dumps(parsed.buildings)
         await session.commit()
 
         old_upg_result = await session.execute(
@@ -108,6 +111,12 @@ async def handle_document(message: Message) -> None:
             (u["building_name"], u["target_level"]) for u in parsed.upgrades
         }
 
+        old_by_key: dict[tuple[str, int], ActiveUpgrade] = {
+            (u.building_name, u.target_level): u
+            for u in old_upgrades
+            if (u.building_name, u.target_level) in new_building_names
+        }
+
         for old_upg in old_upgrades:
             key = (old_upg.building_name, old_upg.target_level)
             if key not in new_building_names:
@@ -117,21 +126,30 @@ async def handle_document(message: Message) -> None:
         builder_index = 0
         new_upgrade_ids: list[int] = []
         for upg_data in parsed.upgrades:
+            key = (upg_data["building_name"], upg_data["target_level"])
             end_time = now + datetime.timedelta(
                 seconds=upg_data["duration_seconds_remaining"]
             )
-            new_upg = ActiveUpgrade(
-                user_id=user_id,
-                building_name=upg_data["building_name"],
-                building_level=upg_data["building_level"],
-                target_level=upg_data["target_level"],
-                start_time=now,
-                end_time=end_time,
-                builder_index=builder_index,
-            )
-            session.add(new_upg)
-            await session.flush()
-            new_upgrade_ids.append(new_upg.id)
+
+            existing = old_by_key.get(key)
+            if existing:
+                existing.end_time = end_time
+                existing.builder_index = builder_index
+                new_upgrade_ids.append(existing.id)
+            else:
+                new_upg = ActiveUpgrade(
+                    user_id=user_id,
+                    building_name=upg_data["building_name"],
+                    building_level=upg_data["building_level"],
+                    target_level=upg_data["target_level"],
+                    start_time=now,
+                    end_time=end_time,
+                    builder_index=builder_index,
+                )
+                session.add(new_upg)
+                await session.flush()
+                new_upgrade_ids.append(new_upg.id)
+
             builder_index += 1
 
         await session.commit()
