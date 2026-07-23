@@ -14,13 +14,54 @@ logger = logging.getLogger(__name__)
 scheduler = AsyncIOScheduler(jobstores={"default": MemoryJobStore()})
 
 
-async def send_upgrade_notification(
-    bot: Bot, user_id: int, building_name: str, target_level: int, builder_index: int
+def _category_line(building_name: str) -> str:
+    from bot.services.parser import (
+        HOME_TROOP_NAMES, HOME_SPELL_NAMES, HOME_SIEGE_MACHINE_NAMES,
+        HOME_HERO_NAMES, HOME_PET_NAMES,
+        BB_HERO_NAMES,
+    )
+    all_lab = (
+        set(HOME_TROOP_NAMES.values())
+        | set(HOME_SPELL_NAMES.values())
+        | set(HOME_SIEGE_MACHINE_NAMES.values())
+    )
+    all_heroes = set(HOME_HERO_NAMES.values()) | set(BB_HERO_NAMES.values())
+    all_pets = set(HOME_PET_NAMES.values())
+    if building_name in all_lab:
+        return "🧪 Laboratory is now available for research!"
+    if building_name in all_heroes:
+        return "🦸 Hero is ready for the next upgrade!"
+    if building_name in all_pets:
+        return "🐾 Pet is ready for the next upgrade!"
+    return "🔨 A builder is now free."
+
+
+async def send_5min_warning(
+    bot: Bot, user_id: int, building_name: str, target_level: int, village: str = "home"
 ) -> None:
+    icon = "🏰" if village == "home" else "🏗️"
     text = (
-        f"🔔 <b>Upgrade Completed!</b>\n\n"
-        f"Your <b>{building_name} (Level {target_level})</b> upgrade is finished!\n"
-        f"Builder #{builder_index} is now free."
+        f"📋 <b>Upgrades</b>\n"
+        f"⏰ <b>5 Minutes Remaining!</b>\n\n"
+        f"{icon} <b>{building_name}</b> \u2192 Lvl {target_level}\n"
+        f"Will be ready in about 5 minutes!"
+    )
+    try:
+        await bot.send_message(chat_id=user_id, text=text, parse_mode="HTML")
+    except Exception as e:
+        logger.error(f"Failed to send 5-min warning to user {user_id}: {e}")
+
+
+async def send_upgrade_notification(
+    bot: Bot, user_id: int, building_name: str, target_level: int,
+    builder_index: int, village: str = "home"
+) -> None:
+    icon = "🏰" if village == "home" else "🏗️"
+    cat = _category_line(building_name)
+    text = (
+        f"🔔 <b>Upgrade Complete!</b>\n\n"
+        f"{icon} <b>{building_name}</b> reached Level <b>{target_level}</b>!\n"
+        f"{cat}"
     )
     try:
         await bot.send_message(chat_id=user_id, text=text, parse_mode="HTML")
@@ -44,7 +85,8 @@ async def send_upgrade_notification(
 
 async def schedule_upgrade(
     bot: Bot, user_id: int, upgrade_id: int, building_name: str,
-    target_level: int, builder_index: int, end_time: datetime.datetime
+    target_level: int, builder_index: int, end_time: datetime.datetime,
+    village: str = "home"
 ) -> None:
     now = datetime.datetime.utcnow()
     run_time = end_time.replace(tzinfo=None)
@@ -65,11 +107,25 @@ async def schedule_upgrade(
         send_upgrade_notification,
         trigger="date",
         run_date=run_time,
-        args=[bot, user_id, building_name, target_level, builder_index],
+        args=[bot, user_id, building_name, target_level, builder_index, village],
         id=job_id,
         replace_existing=True,
         name=f"{building_name} Lvl {target_level} for user {user_id}",
     )
+
+    warning_time = run_time - datetime.timedelta(minutes=5)
+    if warning_time > now:
+        warning_job_id = f"warning_{user_id}_{upgrade_id}"
+        scheduler.add_job(
+            send_5min_warning,
+            trigger="date",
+            run_date=warning_time,
+            args=[bot, user_id, building_name, target_level, village],
+            id=warning_job_id,
+            replace_existing=True,
+            name=f"5min-warning {building_name} Lvl {target_level} for user {user_id}",
+        )
+
     logger.info(
         f"Scheduled notification for {building_name} Lvl {target_level} "
         f"(user {user_id}) at {run_time}"
@@ -77,9 +133,10 @@ async def schedule_upgrade(
 
 
 async def remove_upgrade_job(user_id: int, upgrade_id: int) -> None:
-    job_id = f"upgrade_{user_id}_{upgrade_id}"
-    if scheduler.get_job(job_id):
-        scheduler.remove_job(job_id)
+    for prefix in ("upgrade_", "warning_"):
+        job_id = f"{prefix}{user_id}_{upgrade_id}"
+        if scheduler.get_job(job_id):
+            scheduler.remove_job(job_id)
 
 
 async def load_pending_upgrades(bot: Bot) -> None:
@@ -102,7 +159,8 @@ async def load_pending_upgrades(bot: Bot) -> None:
             continue
         await schedule_upgrade(
             bot, upgrade.user_id, upgrade.id, upgrade.building_name,
-            upgrade.target_level, upgrade.builder_index, upgrade.end_time
+            upgrade.target_level, upgrade.builder_index, upgrade.end_time,
+            village=upgrade.village,
         )
         count += 1
 

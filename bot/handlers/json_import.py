@@ -169,6 +169,7 @@ async def handle_document(message: Message) -> None:
                 target_level=upg_data["target_level"],
                 builder_index=idx,
                 end_time=end_time,
+                village=upg_data.get("village", "home"),
             )
 
     progress = calculate_th_progress(parsed.town_hall, parsed.buildings)

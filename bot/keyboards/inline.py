@@ -11,7 +11,7 @@ def main_menu(user_id: int, admin_ids: list[int] | None = None, town_hall: int =
         InlineKeyboardButton(text="🔄 Refresh Progress", callback_data="menu:refresh"),
     )
     builder.row(
-        InlineKeyboardButton(text="🔨 Active Builders", callback_data="menu:builders"),
+        InlineKeyboardButton(text="📋 Upgrades", callback_data="menu:upgrades"),
         InlineKeyboardButton(text="📊 Detailed Stats", callback_data="menu:stats"),
     )
     builder.row(

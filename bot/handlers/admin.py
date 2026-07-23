@@ -26,8 +26,8 @@ def is_admin(user_id: int) -> bool:
     return user_id in ADMIN_IDS
 
 
-@admin_router.callback_query(F.data == "menu:builders")
-async def callback_builders(callback: CallbackQuery) -> None:
+@admin_router.callback_query(F.data.in_({"menu:upgrades", "menu:builders"}))
+async def callback_upgrades(callback: CallbackQuery) -> None:
     user_id = callback.from_user.id
     async with async_session() as session:
         result = await session.execute(select(User).where(User.id == user_id))
@@ -44,48 +44,134 @@ async def callback_builders(callback: CallbackQuery) -> None:
         )
         active = result.scalars().all()
 
+    from bot.services.calculator import format_duration
+    from bot.services.parser import (
+        HOME_TROOP_NAMES, HOME_SPELL_NAMES, HOME_SIEGE_MACHINE_NAMES,
+        HOME_HERO_NAMES, HOME_PET_NAMES,
+        BB_TROOP_NAMES, BB_HERO_NAMES,
+    )
+
+    HOME_LAB_NAMES = (
+        set(HOME_TROOP_NAMES.values())
+        | set(HOME_SPELL_NAMES.values())
+        | set(HOME_SIEGE_MACHINE_NAMES.values())
+    )
+    HOME_HERO_NAMES_SET = set(HOME_HERO_NAMES.values())
+    HOME_PET_NAMES_SET = set(HOME_PET_NAMES.values())
+    BB_LAB_NAMES = set(BB_TROOP_NAMES.values())
+    BB_HERO_NAMES_SET = set(BB_HERO_NAMES.values())
+
     now = datetime.datetime.utcnow()
-    busy = len(active)
-    free = max(0, user.total_builders - busy)
+    buildings = json_lib.loads(user.buildings_snapshot) if user.buildings_snapshot else []
+
+    def find_building(name: str, village: str = "home") -> int | None:
+        for b in buildings:
+            if b["name"] == name and b.get("village", "home") == village:
+                return b["level"]
+        return None
+
+    def cat(name: str, village: str) -> str:
+        if village == "home":
+            if name in HOME_LAB_NAMES: return "lab"
+            if name in HOME_HERO_NAMES_SET: return "heroes"
+            if name in HOME_PET_NAMES_SET: return "pets"
+            return "buildings"
+        if name in BB_LAB_NAMES: return "lab"
+        if name in BB_HERO_NAMES_SET: return "heroes"
+        return "buildings"
+
+    def fmt(upg, num=None):
+        remaining = int((upg.end_time.replace(tzinfo=None) - now).total_seconds())
+        ts = format_duration(remaining) if remaining > 0 else "Completing..."
+        if num is not None:
+            return f"  👷 Builder #{num}: <b>{upg.building_name}</b> → Lvl {upg.target_level} ({ts})"
+        return f"  🔬 <b>{upg.building_name}</b> → Lvl {upg.target_level} ({ts})"
 
     if not active:
-        text = (
-            f"🔨 <b>Builder Status</b>\n\n"
-            f"All <b>{user.total_builders}</b> builders are free!\n"
-            f"No upgrades in progress."
-        )
-    else:
-        lines = [f"🔨 <b>Builder Status</b>\n"]
-        lines.append(f"Free: <b>{free}/{user.total_builders}</b>\n")
+        text = "📋 <b>Upgrades</b>\n\nNo upgrades in progress.\nAll builders are free!"
+        await callback.message.edit_text(text, parse_mode="HTML", reply_markup=back_to_menu())
+        await callback.answer()
+        return
 
-        from bot.services.calculator import format_duration
+    lines = ["📋 <b>Upgrades</b>\n"]
+    builder_counter = 0
 
-        home_upgs = [u for u in active if u.village == "home"]
-        bb_upgs = [u for u in active if u.village == "builder_base"]
+    # ---- Home Village ----
+    home_upgs = [u for u in active if u.village == "home"]
+    if home_upgs:
+        lines.append("── 🏰 Town Hall ──\n")
 
-        def format_upgrade_list(upgs: list, label: str) -> list[str]:
-            out: list[str] = []
-            if upgs:
-                out.append(f"── {label} ──")
-                for idx, upg in enumerate(upgs, 1):
-                    remaining = int((upg.end_time.replace(tzinfo=None) - now).total_seconds())
-                    time_str = format_duration(remaining) if remaining > 0 else "Completing..."
-                    out.append(
-                        f"👷 Builder #{idx}: <b>{upg.building_name}</b> "
-                        f"→ Lvl {upg.target_level} ({time_str})"
-                    )
-                out.append("")
-            return out
+        h_build = [u for u in home_upgs if cat(u.building_name, "home") == "buildings"]
+        h_lab   = [u for u in home_upgs if cat(u.building_name, "home") == "lab"]
+        h_hero  = [u for u in home_upgs if cat(u.building_name, "home") == "heroes"]
+        h_pet   = [u for u in home_upgs if cat(u.building_name, "home") == "pets"]
 
-        lines.extend(format_upgrade_list(home_upgs, "🏰 Town Hall Builders"))
-        lines.extend(format_upgrade_list(bb_upgs, "🏗️ Builder Base Builders"))
-        text = "\n".join(lines).rstrip("\n")
+        if h_build:
+            lines.append("🏛️ <b>Buildings:</b>")
+            for u in h_build:
+                builder_counter += 1
+                lines.append(fmt(u, builder_counter))
+            lines.append("")
 
-    await callback.message.edit_text(
-        text,
-        parse_mode="HTML",
-        reply_markup=back_to_menu(),
-    )
+        lab_level = find_building("Laboratory")
+        if lab_level is not None:
+            lines.append("🧪 <b>Laboratory</b>")
+            if h_lab:
+                for u in h_lab:
+                    lines.append(fmt(u))
+                lines.append("")
+            else:
+                lines.append(f"  🔬 Laboratory (Lvl {lab_level}) is free, you can start a research now.\n")
+
+        if user.town_hall >= 7 and h_hero:
+            lines.append("🦸 <b>Heroes:</b>")
+            for u in h_hero:
+                builder_counter += 1
+                lines.append(fmt(u, builder_counter))
+            lines.append("")
+
+        if user.town_hall >= 14 and h_pet:
+            lines.append("🐾 <b>Pets:</b>")
+            for u in h_pet:
+                builder_counter += 1
+                lines.append(fmt(u, builder_counter))
+            lines.append("")
+
+    # ---- Builder Base ----
+    bb_upgs = [u for u in active if u.village == "builder_base"]
+    if bb_upgs:
+        lines.append("── 🏗️ Builder Base ──\n")
+
+        bb_build = [u for u in bb_upgs if cat(u.building_name, "builder_base") == "buildings"]
+        bb_lab   = [u for u in bb_upgs if cat(u.building_name, "builder_base") == "lab"]
+        bb_hero  = [u for u in bb_upgs if cat(u.building_name, "builder_base") == "heroes"]
+
+        if bb_build:
+            lines.append("🏛️ <b>Buildings:</b>")
+            for u in bb_build:
+                builder_counter += 1
+                lines.append(fmt(u, builder_counter))
+            lines.append("")
+
+        star_lab_level = find_building("Star Laboratory", "builder_base")
+        if star_lab_level is not None:
+            lines.append("🧪 <b>Star Laboratory</b>")
+            if bb_lab:
+                for u in bb_lab:
+                    lines.append(fmt(u))
+                lines.append("")
+            else:
+                lines.append(f"  🔬 Star Laboratory (Lvl {star_lab_level}) is free, you can start a research now.\n")
+
+        if bb_hero:
+            lines.append("🦸 <b>Heroes:</b>")
+            for u in bb_hero:
+                builder_counter += 1
+                lines.append(fmt(u, builder_counter))
+            lines.append("")
+
+    text = "\n".join(lines).rstrip("\n")
+    await callback.message.edit_text(text, parse_mode="HTML", reply_markup=back_to_menu())
     await callback.answer()
 
 
