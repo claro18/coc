@@ -58,26 +58,40 @@ async def build_status_text(user: User) -> tuple[str, bool]:
     busy_builders = len(active_upgrades)
     free_builders = max(0, user.total_builders - busy_builders)
 
+    now = datetime.datetime.utcnow()
+
+    home_active = [u for u in active_upgrades if u.village == "home"]
+    bb_active = [u for u in active_upgrades if u.village == "builder_base"]
+
     next_free = ""
     if active_upgrades:
-        now = datetime.datetime.utcnow()
         earliest = min(active_upgrades, key=lambda u: u.end_time)
         remaining = int((earliest.end_time.replace(tzinfo=None) - now).total_seconds())
         if remaining > 0:
+            village_icon = "🏰" if earliest.village == "home" else "🏗️"
             next_free = (
                 f"⏳ Next Builder Free in: <b>{format_duration(remaining)}</b> "
-                f"({earliest.building_name} Lvl {earliest.target_level})"
+                f"({village_icon} {earliest.building_name} Lvl {earliest.target_level})"
             )
         else:
             next_free = "⏳ Some upgrades completing shortly..."
 
-    text = (
-        f"🏰 <b>Town Hall Level: {user.town_hall}</b>\n"
-        f"📊 TH Progress: <b>{bar} {progress:.1f}%</b>\n"
-        f"🔨 Active Builders: <b>{free_builders}/{user.total_builders}</b> Free\n"
-        f"{next_free}\n\n"
-        f"Use the buttons below to manage your village tracking."
-    )
+    lines = [f"🏰 <b>Town Hall Level: {user.town_hall}</b>"]
+    if home_active or bb_active:
+        lines.append(f"📊 TH Progress: <b>{bar} {progress:.1f}%</b>")
+        lines.append(f"🔨 Active Builders: <b>{free_builders}/{user.total_builders}</b> Free")
+        if home_active:
+            lines.append(f"── 🏰 Town Hall: {len(home_active)} upgrade(s)")
+        if bb_active:
+            lines.append(f"── 🏗️ Builder Base: {len(bb_active)} upgrade(s)")
+    else:
+        lines.append(f"📊 TH Progress: <b>{bar} {progress:.1f}%</b>")
+        lines.append(f"🔨 Active Builders: <b>{free_builders}/{user.total_builders}</b> Free")
+    lines.append("")
+    lines.append(next_free)
+    lines.append("")
+    lines.append("Use the buttons below to manage your village tracking.")
+    text = "\n".join(lines).strip()
     return text, has_data
 
 

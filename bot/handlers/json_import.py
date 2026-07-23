@@ -107,26 +107,27 @@ async def handle_document(message: Message) -> None:
         )
         old_upgrades = old_upg_result.scalars().all()
 
-        new_building_names = {
-            (u["building_name"], u["target_level"]) for u in parsed.upgrades
+        new_upgrade_keys = {
+            (u["building_name"], u["target_level"], u.get("village", "home"))
+            for u in parsed.upgrades
         }
 
-        old_by_key: dict[tuple[str, int], ActiveUpgrade] = {
-            (u.building_name, u.target_level): u
+        old_by_key: dict[tuple[str, int, str], ActiveUpgrade] = {
+            (u.building_name, u.target_level, u.village): u
             for u in old_upgrades
-            if (u.building_name, u.target_level) in new_building_names
+            if (u.building_name, u.target_level, u.village) in new_upgrade_keys
         }
 
         for old_upg in old_upgrades:
-            key = (old_upg.building_name, old_upg.target_level)
-            if key not in new_building_names:
+            key = (old_upg.building_name, old_upg.target_level, old_upg.village)
+            if key not in new_upgrade_keys:
                 old_upg.is_completed = True
                 await remove_upgrade_job(user_id, old_upg.id)
 
         builder_index = 0
         new_upgrade_ids: list[int] = []
         for upg_data in parsed.upgrades:
-            key = (upg_data["building_name"], upg_data["target_level"])
+            key = (upg_data["building_name"], upg_data["target_level"], upg_data.get("village", "home"))
             end_time = now + datetime.timedelta(
                 seconds=upg_data["duration_seconds_remaining"]
             )
@@ -145,6 +146,7 @@ async def handle_document(message: Message) -> None:
                     start_time=now,
                     end_time=end_time,
                     builder_index=builder_index,
+                    village=upg_data.get("village", "home"),
                 )
                 session.add(new_upg)
                 await session.flush()
@@ -171,6 +173,9 @@ async def handle_document(message: Message) -> None:
 
     progress = calculate_th_progress(parsed.town_hall, parsed.buildings)
     bar = make_progress_bar(progress)
+
+    home_upgrades = [u for u in parsed.upgrades if u.get("village", "home") == "home"]
+    bb_upgrades = [u for u in parsed.upgrades if u.get("village") == "builder_base"]
     busy = len(parsed.upgrades)
     free = max(0, parsed.total_builders - busy)
 
@@ -186,12 +191,25 @@ async def handle_document(message: Message) -> None:
     if parsed.builder_hall:
         th_line += f"  |  🏗️ Builder Hall: <b>{parsed.builder_hall}</b>"
 
+    upgrades_detail = ""
+    if home_upgrades:
+        upgrades_detail += (
+            f"\n── 🏰 Town Hall Builders ──\n"
+            f"└ {len(home_upgrades)} upgrade(s) in progress"
+        )
+    if bb_upgrades:
+        upgrades_detail += (
+            f"\n── 🏗️ Builder Base Builders ──\n"
+            f"└ {len(bb_upgrades)} upgrade(s) in progress"
+        )
+
     summary = (
         f"✅ <b>Village Imported Successfully!</b>\n\n"
         f"{th_line}\n"
         f"📊 Progress: {bar} <b>{progress:.1f}%</b>\n"
         f"🔨 Builders: <b>{free}/{parsed.total_builders}</b> Free\n"
-        f"📦 Upgrades Tracked: <b>{upgrade_count}</b>\n"
+        f"📦 Upgrades Tracked: <b>{upgrade_count}</b>"
+        f"{upgrades_detail}\n"
         f"{next_free_text}\n"
         f"You'll be notified as upgrades complete!"
     )

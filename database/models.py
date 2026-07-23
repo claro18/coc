@@ -30,6 +30,7 @@ class ActiveUpgrade(Base):
     start_time: Mapped[datetime.datetime] = mapped_column(DateTime)
     end_time: Mapped[datetime.datetime] = mapped_column(DateTime)
     builder_index: Mapped[int] = mapped_column(Integer, default=0)
+    village: Mapped[str] = mapped_column(String, default="home")
     is_completed: Mapped[bool] = mapped_column(Boolean, default=False)
 
     user = relationship("User", back_populates="upgrades")

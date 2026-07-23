@@ -57,18 +57,29 @@ async def callback_builders(callback: CallbackQuery) -> None:
     else:
         lines = [f"🔨 <b>Builder Status</b>\n"]
         lines.append(f"Free: <b>{free}/{user.total_builders}</b>\n")
-        for upg in active:
-            remaining = int((upg.end_time.replace(tzinfo=None) - now).total_seconds())
-            if remaining > 0:
-                from bot.services.calculator import format_duration
-                time_str = format_duration(remaining)
-            else:
-                time_str = "Completing..."
-            lines.append(
-                f"👷 Builder #{upg.builder_index + 1}: <b>{upg.building_name}</b> "
-                f"→ Lvl {upg.target_level} ({time_str})"
-            )
-        text = "\n".join(lines)
+
+        from bot.services.calculator import format_duration
+
+        home_upgs = [u for u in active if u.village == "home"]
+        bb_upgs = [u for u in active if u.village == "builder_base"]
+
+        def format_upgrade_list(upgs: list, label: str) -> list[str]:
+            out: list[str] = []
+            if upgs:
+                out.append(f"── {label} ──")
+                for idx, upg in enumerate(upgs, 1):
+                    remaining = int((upg.end_time.replace(tzinfo=None) - now).total_seconds())
+                    time_str = format_duration(remaining) if remaining > 0 else "Completing..."
+                    out.append(
+                        f"👷 Builder #{idx}: <b>{upg.building_name}</b> "
+                        f"→ Lvl {upg.target_level} ({time_str})"
+                    )
+                out.append("")
+            return out
+
+        lines.extend(format_upgrade_list(home_upgs, "🏰 Town Hall Builders"))
+        lines.extend(format_upgrade_list(bb_upgs, "🏗️ Builder Base Builders"))
+        text = "\n".join(lines).rstrip("\n")
 
     await callback.message.edit_text(
         text,

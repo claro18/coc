@@ -37,3 +37,4 @@ async def init_db():
         from database.models import User, ActiveUpgrade
         await conn.run_sync(Base.metadata.create_all)
         await _migrate_add_column(conn, "users", "buildings_snapshot", "TEXT")
+        await _migrate_add_column(conn, "active_upgrades", "village", "VARCHAR(32) DEFAULT 'home'")

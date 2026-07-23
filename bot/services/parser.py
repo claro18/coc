@@ -332,7 +332,7 @@ class ParseResult:
 def _parse_entries(
     entries: list[dict],
     name_map: dict[int, str],
-    suffix: str = "",
+    village: str = "home",
 ) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     items: list[dict[str, Any]] = []
     upgrades: list[dict[str, Any]] = []
@@ -352,18 +352,20 @@ def _parse_entries(
 
         if timer is not None:
             upgrades.append({
-                "building_name": f"{name}{suffix}",
+                "building_name": name,
                 "building_level": lvl,
                 "target_level": lvl + 1,
                 "duration_seconds_remaining": int(timer),
                 "data_id": data_id,
+                "village": village,
             })
 
         for _ in range(cnt):
             items.append({
-                "name": f"{name}{suffix}",
+                "name": name,
                 "level": lvl,
                 "data_id": data_id,
+                "village": village,
             })
 
     return items, upgrades
@@ -402,7 +404,7 @@ def parse_export(file_bytes: bytes) -> ParseResult:
 
     buildings2_raw: list[dict] = data.get("buildings2") or []
     if isinstance(buildings2_raw, list):
-        items, upgs = _parse_entries(buildings2_raw, BUILDER_BASE_NAMES, " (BB)")
+        items, upgs = _parse_entries(buildings2_raw, BUILDER_BASE_NAMES, "builder_base")
         all_items.extend(items)
         all_upgrades.extend(upgs)
         for b in buildings2_raw:
@@ -433,10 +435,9 @@ def parse_export(file_bytes: bytes) -> ParseResult:
         all_items.extend(items)
         all_upgrades.extend(upgs)
 
-    # handle traps2 (BB traps)
     traps2_raw: list[dict] = data.get("traps2") or []
     if isinstance(traps2_raw, list):
-        items, upgs = _parse_entries(traps2_raw, BUILDER_BASE_NAMES, " (BB)")
+        items, upgs = _parse_entries(traps2_raw, BUILDER_BASE_NAMES, "builder_base")
         all_items.extend(items)
         all_upgrades.extend(upgs)
 
