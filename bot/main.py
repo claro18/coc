@@ -33,6 +33,7 @@ async def main():
     from bot.handlers.start import start_router
     from bot.handlers.json_import import json_router
     from bot.handlers.admin import admin_router as bot_admin_router
+    from bot.handlers.progression import prog_router
     from bot.services.scheduler import (
         start_scheduler,
         load_pending_upgrades,
@@ -45,7 +46,7 @@ async def main():
     )
     dp = Dispatcher()
 
-    dp.include_routers(start_router, json_router, bot_admin_router)
+    dp.include_routers(start_router, json_router, bot_admin_router, prog_router)
 
     await init_db()
     logger.info("Database initialized")

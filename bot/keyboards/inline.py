@@ -5,7 +5,7 @@ import os
 WEBAPP_URL = os.getenv("WEBAPP_URL", "https://localhost:8000")
 
 
-def main_menu(user_id: int, admin_ids: list[int] | None = None) -> InlineKeyboardMarkup:
+def main_menu(user_id: int, admin_ids: list[int] | None = None, town_hall: int = 0) -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
     builder.row(
         InlineKeyboardButton(text="🔄 Refresh Progress", callback_data="menu:refresh"),
@@ -15,7 +15,10 @@ def main_menu(user_id: int, admin_ids: list[int] | None = None) -> InlineKeyboar
         InlineKeyboardButton(text="📊 Detailed Stats", callback_data="menu:stats"),
     )
     builder.row(
+        InlineKeyboardButton(text="📈 Progression", callback_data="prog:menu"),
         InlineKeyboardButton(text="📜 Upgrade History", callback_data="menu:history"),
+    )
+    builder.row(
         InlineKeyboardButton(text="⚙️ Help", callback_data="menu:help"),
     )
     if admin_ids and user_id in admin_ids:
@@ -25,6 +28,20 @@ def main_menu(user_id: int, admin_ids: list[int] | None = None) -> InlineKeyboar
                 web_app=WebAppInfo(url=WEBAPP_URL),
             )
         )
+    return builder.as_markup()
+
+
+def progression_menu(town_hall: int) -> InlineKeyboardMarkup:
+    from bot.services.progression import get_visible_sections
+    builder = InlineKeyboardBuilder()
+    sections = get_visible_sections(town_hall)
+    if "laboratory" in sections:
+        builder.row(InlineKeyboardButton(text="🧪 Laboratory", callback_data="prog:lab"))
+    if "heroes" in sections:
+        builder.row(InlineKeyboardButton(text="🦸 Heroes", callback_data="prog:heroes"))
+    if "pets" in sections:
+        builder.row(InlineKeyboardButton(text="🐾 Pets", callback_data="prog:pets"))
+    builder.row(InlineKeyboardButton(text="↩️ Back to Menu", callback_data="menu:main"))
     return builder.as_markup()
 
 

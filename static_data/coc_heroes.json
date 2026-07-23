@@ -1,0 +1,127 @@
+{
+  "heroes": {
+    "Barbarian King": {
+      "unlock_th": 7,
+      "max_level": 95,
+      "levels": {
+        "1": {"upgrade_time_seconds": 3600, "cost": 60000, "resource": "Dark Elixir"},
+        "5": {"upgrade_time_seconds": 43200, "cost": 75000, "resource": "Dark Elixir"},
+        "10": {"upgrade_time_seconds": 86400, "cost": 125000, "resource": "Dark Elixir"},
+        "15": {"upgrade_time_seconds": 129600, "cost": 190000, "resource": "Dark Elixir"},
+        "20": {"upgrade_time_seconds": 172800, "cost": 270000, "resource": "Dark Elixir"},
+        "25": {"upgrade_time_seconds": 172800, "cost": 350000, "resource": "Dark Elixir"},
+        "30": {"upgrade_time_seconds": 172800, "cost": 430000, "resource": "Dark Elixir"},
+        "35": {"upgrade_time_seconds": 172800, "cost": 510000, "resource": "Dark Elixir"},
+        "40": {"upgrade_time_seconds": 172800, "cost": 600000, "resource": "Dark Elixir"},
+        "45": {"upgrade_time_seconds": 172800, "cost": 700000, "resource": "Dark Elixir"},
+        "50": {"upgrade_time_seconds": 172800, "cost": 850000, "resource": "Dark Elixir"},
+        "55": {"upgrade_time_seconds": 172800, "cost": 1000000, "resource": "Dark Elixir"},
+        "60": {"upgrade_time_seconds": 172800, "cost": 1150000, "resource": "Dark Elixir"},
+        "65": {"upgrade_time_seconds": 172800, "cost": 1300000, "resource": "Dark Elixir"},
+        "70": {"upgrade_time_seconds": 172800, "cost": 1450000, "resource": "Dark Elixir"},
+        "75": {"upgrade_time_seconds": 172800, "cost": 1600000, "resource": "Dark Elixir"},
+        "80": {"upgrade_time_seconds": 172800, "cost": 1750000, "resource": "Dark Elixir"},
+        "85": {"upgrade_time_seconds": 172800, "cost": 1900000, "resource": "Dark Elixir"},
+        "90": {"upgrade_time_seconds": 172800, "cost": 2050000, "resource": "Dark Elixir"},
+        "95": {"upgrade_time_seconds": 172800, "cost": 2200000, "resource": "Dark Elixir"}
+      }
+    },
+    "Archer Queen": {
+      "unlock_th": 8,
+      "max_level": 95,
+      "levels": {
+        "1": {"upgrade_time_seconds": 3600, "cost": 60000, "resource": "Dark Elixir"},
+        "5": {"upgrade_time_seconds": 43200, "cost": 75000, "resource": "Dark Elixir"},
+        "10": {"upgrade_time_seconds": 86400, "cost": 125000, "resource": "Dark Elixir"},
+        "15": {"upgrade_time_seconds": 129600, "cost": 190000, "resource": "Dark Elixir"},
+        "20": {"upgrade_time_seconds": 172800, "cost": 270000, "resource": "Dark Elixir"},
+        "25": {"upgrade_time_seconds": 172800, "cost": 350000, "resource": "Dark Elixir"},
+        "30": {"upgrade_time_seconds": 172800, "cost": 430000, "resource": "Dark Elixir"},
+        "35": {"upgrade_time_seconds": 172800, "cost": 510000, "resource": "Dark Elixir"},
+        "40": {"upgrade_time_seconds": 172800, "cost": 600000, "resource": "Dark Elixir"},
+        "45": {"upgrade_time_seconds": 172800, "cost": 700000, "resource": "Dark Elixir"},
+        "50": {"upgrade_time_seconds": 172800, "cost": 850000, "resource": "Dark Elixir"},
+        "55": {"upgrade_time_seconds": 172800, "cost": 1000000, "resource": "Dark Elixir"},
+        "60": {"upgrade_time_seconds": 172800, "cost": 1150000, "resource": "Dark Elixir"},
+        "65": {"upgrade_time_seconds": 172800, "cost": 1300000, "resource": "Dark Elixir"},
+        "70": {"upgrade_time_seconds": 172800, "cost": 1450000, "resource": "Dark Elixir"},
+        "75": {"upgrade_time_seconds": 172800, "cost": 1600000, "resource": "Dark Elixir"},
+        "80": {"upgrade_time_seconds": 172800, "cost": 1750000, "resource": "Dark Elixir"},
+        "85": {"upgrade_time_seconds": 172800, "cost": 1900000, "resource": "Dark Elixir"},
+        "90": {"upgrade_time_seconds": 172800, "cost": 2050000, "resource": "Dark Elixir"},
+        "95": {"upgrade_time_seconds": 172800, "cost": 2200000, "resource": "Dark Elixir"}
+      }
+    },
+    "Minion Prince": {
+      "unlock_th": 9,
+      "max_level": 95,
+      "levels": {
+        "1": {"upgrade_time_seconds": 3600, "cost": 60000, "resource": "Dark Elixir"},
+        "5": {"upgrade_time_seconds": 43200, "cost": 75000, "resource": "Dark Elixir"},
+        "10": {"upgrade_time_seconds": 86400, "cost": 125000, "resource": "Dark Elixir"},
+        "15": {"upgrade_time_seconds": 129600, "cost": 190000, "resource": "Dark Elixir"},
+        "20": {"upgrade_time_seconds": 172800, "cost": 270000, "resource": "Dark Elixir"},
+        "25": {"upgrade_time_seconds": 172800, "cost": 350000, "resource": "Dark Elixir"},
+        "30": {"upgrade_time_seconds": 172800, "cost": 430000, "resource": "Dark Elixir"},
+        "35": {"upgrade_time_seconds": 172800, "cost": 510000, "resource": "Dark Elixir"},
+        "40": {"upgrade_time_seconds": 172800, "cost": 600000, "resource": "Dark Elixir"},
+        "45": {"upgrade_time_seconds": 172800, "cost": 700000, "resource": "Dark Elixir"},
+        "50": {"upgrade_time_seconds": 172800, "cost": 850000, "resource": "Dark Elixir"},
+        "55": {"upgrade_time_seconds": 172800, "cost": 1000000, "resource": "Dark Elixir"},
+        "60": {"upgrade_time_seconds": 172800, "cost": 1150000, "resource": "Dark Elixir"},
+        "65": {"upgrade_time_seconds": 172800, "cost": 1300000, "resource": "Dark Elixir"},
+        "70": {"upgrade_time_seconds": 172800, "cost": 1450000, "resource": "Dark Elixir"},
+        "75": {"upgrade_time_seconds": 172800, "cost": 1600000, "resource": "Dark Elixir"},
+        "80": {"upgrade_time_seconds": 172800, "cost": 1750000, "resource": "Dark Elixir"},
+        "85": {"upgrade_time_seconds": 172800, "cost": 1900000, "resource": "Dark Elixir"},
+        "90": {"upgrade_time_seconds": 172800, "cost": 2050000, "resource": "Dark Elixir"},
+        "95": {"upgrade_time_seconds": 172800, "cost": 2200000, "resource": "Dark Elixir"}
+      }
+    },
+    "Grand Warden": {
+      "unlock_th": 11,
+      "max_level": 65,
+      "levels": {
+        "1": {"upgrade_time_seconds": 3600, "cost": 6000000, "resource": "Elixir"},
+        "5": {"upgrade_time_seconds": 43200, "cost": 7000000, "resource": "Elixir"},
+        "10": {"upgrade_time_seconds": 86400, "cost": 8000000, "resource": "Elixir"},
+        "15": {"upgrade_time_seconds": 129600, "cost": 9000000, "resource": "Elixir"},
+        "20": {"upgrade_time_seconds": 172800, "cost": 10000000, "resource": "Elixir"},
+        "25": {"upgrade_time_seconds": 172800, "cost": 11000000, "resource": "Elixir"},
+        "30": {"upgrade_time_seconds": 172800, "cost": 12000000, "resource": "Elixir"},
+        "35": {"upgrade_time_seconds": 172800, "cost": 13000000, "resource": "Elixir"},
+        "40": {"upgrade_time_seconds": 172800, "cost": 14000000, "resource": "Elixir"},
+        "45": {"upgrade_time_seconds": 172800, "cost": 15000000, "resource": "Elixir"},
+        "50": {"upgrade_time_seconds": 172800, "cost": 16000000, "resource": "Elixir"},
+        "55": {"upgrade_time_seconds": 172800, "cost": 17000000, "resource": "Elixir"},
+        "60": {"upgrade_time_seconds": 172800, "cost": 18000000, "resource": "Elixir"},
+        "65": {"upgrade_time_seconds": 172800, "cost": 19000000, "resource": "Elixir"}
+      }
+    },
+    "Royal Champion": {
+      "unlock_th": 13,
+      "max_level": 40,
+      "levels": {
+        "1": {"upgrade_time_seconds": 3600, "cost": 180000, "resource": "Dark Elixir"},
+        "5": {"upgrade_time_seconds": 43200, "cost": 210000, "resource": "Dark Elixir"},
+        "10": {"upgrade_time_seconds": 86400, "cost": 250000, "resource": "Dark Elixir"},
+        "15": {"upgrade_time_seconds": 129600, "cost": 290000, "resource": "Dark Elixir"},
+        "20": {"upgrade_time_seconds": 172800, "cost": 330000, "resource": "Dark Elixir"},
+        "25": {"upgrade_time_seconds": 172800, "cost": 370000, "resource": "Dark Elixir"},
+        "30": {"upgrade_time_seconds": 172800, "cost": 410000, "resource": "Dark Elixir"},
+        "35": {"upgrade_time_seconds": 172800, "cost": 450000, "resource": "Dark Elixir"},
+        "40": {"upgrade_time_seconds": 172800, "cost": 490000, "resource": "Dark Elixir"}
+      }
+    },
+    "Dragon Duke": {
+      "unlock_th": 15,
+      "max_level": 15,
+      "levels": {
+        "1": {"upgrade_time_seconds": 3600, "cost": 200000, "resource": "Dark Elixir"},
+        "5": {"upgrade_time_seconds": 43200, "cost": 280000, "resource": "Dark Elixir"},
+        "10": {"upgrade_time_seconds": 86400, "cost": 360000, "resource": "Dark Elixir"},
+        "15": {"upgrade_time_seconds": 172800, "cost": 440000, "resource": "Dark Elixir"}
+      }
+    }
+  }
+}

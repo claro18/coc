@@ -1,0 +1,113 @@
+{
+  "pet_house_unlock_th": 14,
+  "pets": {
+    "L.A.S.S.I": {
+      "unlock_pet_house_level": 1,
+      "max_level": 10,
+      "levels": {
+        "1": {"upgrade_time_seconds": 86400, "cost": 120000, "resource": "Dark Elixir"},
+        "5": {"upgrade_time_seconds": 172800, "cost": 200000, "resource": "Dark Elixir"},
+        "10": {"upgrade_time_seconds": 259200, "cost": 300000, "resource": "Dark Elixir"}
+      }
+    },
+    "Mighty Yak": {
+      "unlock_pet_house_level": 1,
+      "max_level": 10,
+      "levels": {
+        "1": {"upgrade_time_seconds": 86400, "cost": 120000, "resource": "Dark Elixir"},
+        "5": {"upgrade_time_seconds": 172800, "cost": 200000, "resource": "Dark Elixir"},
+        "10": {"upgrade_time_seconds": 259200, "cost": 300000, "resource": "Dark Elixir"}
+      }
+    },
+    "Electro Owl": {
+      "unlock_pet_house_level": 2,
+      "max_level": 10,
+      "levels": {
+        "1": {"upgrade_time_seconds": 86400, "cost": 140000, "resource": "Dark Elixir"},
+        "5": {"upgrade_time_seconds": 172800, "cost": 220000, "resource": "Dark Elixir"},
+        "10": {"upgrade_time_seconds": 259200, "cost": 320000, "resource": "Dark Elixir"}
+      }
+    },
+    "Unicorn": {
+      "unlock_pet_house_level": 2,
+      "max_level": 10,
+      "levels": {
+        "1": {"upgrade_time_seconds": 86400, "cost": 140000, "resource": "Dark Elixir"},
+        "5": {"upgrade_time_seconds": 172800, "cost": 220000, "resource": "Dark Elixir"},
+        "10": {"upgrade_time_seconds": 259200, "cost": 320000, "resource": "Dark Elixir"}
+      }
+    },
+    "Phoenix": {
+      "unlock_pet_house_level": 3,
+      "max_level": 10,
+      "levels": {
+        "1": {"upgrade_time_seconds": 86400, "cost": 160000, "resource": "Dark Elixir"},
+        "5": {"upgrade_time_seconds": 172800, "cost": 240000, "resource": "Dark Elixir"},
+        "10": {"upgrade_time_seconds": 259200, "cost": 340000, "resource": "Dark Elixir"}
+      }
+    },
+    "Poison Lizard": {
+      "unlock_pet_house_level": 3,
+      "max_level": 10,
+      "levels": {
+        "1": {"upgrade_time_seconds": 86400, "cost": 160000, "resource": "Dark Elixir"},
+        "5": {"upgrade_time_seconds": 172800, "cost": 240000, "resource": "Dark Elixir"},
+        "10": {"upgrade_time_seconds": 259200, "cost": 340000, "resource": "Dark Elixir"}
+      }
+    },
+    "Diggy": {
+      "unlock_pet_house_level": 4,
+      "max_level": 10,
+      "levels": {
+        "1": {"upgrade_time_seconds": 86400, "cost": 180000, "resource": "Dark Elixir"},
+        "5": {"upgrade_time_seconds": 172800, "cost": 260000, "resource": "Dark Elixir"},
+        "10": {"upgrade_time_seconds": 259200, "cost": 360000, "resource": "Dark Elixir"}
+      }
+    },
+    "Frosty": {
+      "unlock_pet_house_level": 4,
+      "max_level": 10,
+      "levels": {
+        "1": {"upgrade_time_seconds": 86400, "cost": 180000, "resource": "Dark Elixir"},
+        "5": {"upgrade_time_seconds": 172800, "cost": 260000, "resource": "Dark Elixir"},
+        "10": {"upgrade_time_seconds": 259200, "cost": 360000, "resource": "Dark Elixir"}
+      }
+    },
+    "Spirit Fox": {
+      "unlock_pet_house_level": 5,
+      "max_level": 10,
+      "levels": {
+        "1": {"upgrade_time_seconds": 86400, "cost": 200000, "resource": "Dark Elixir"},
+        "5": {"upgrade_time_seconds": 172800, "cost": 280000, "resource": "Dark Elixir"},
+        "10": {"upgrade_time_seconds": 259200, "cost": 380000, "resource": "Dark Elixir"}
+      }
+    },
+    "Angry Jelly": {
+      "unlock_pet_house_level": 5,
+      "max_level": 10,
+      "levels": {
+        "1": {"upgrade_time_seconds": 86400, "cost": 200000, "resource": "Dark Elixir"},
+        "5": {"upgrade_time_seconds": 172800, "cost": 280000, "resource": "Dark Elixir"},
+        "10": {"upgrade_time_seconds": 259200, "cost": 380000, "resource": "Dark Elixir"}
+      }
+    },
+    "Sneezy": {
+      "unlock_pet_house_level": 6,
+      "max_level": 10,
+      "levels": {
+        "1": {"upgrade_time_seconds": 86400, "cost": 220000, "resource": "Dark Elixir"},
+        "5": {"upgrade_time_seconds": 172800, "cost": 300000, "resource": "Dark Elixir"},
+        "10": {"upgrade_time_seconds": 259200, "cost": 400000, "resource": "Dark Elixir"}
+      }
+    },
+    "Greedy Raven": {
+      "unlock_pet_house_level": 6,
+      "max_level": 10,
+      "levels": {
+        "1": {"upgrade_time_seconds": 86400, "cost": 220000, "resource": "Dark Elixir"},
+        "5": {"upgrade_time_seconds": 172800, "cost": 300000, "resource": "Dark Elixir"},
+        "10": {"upgrade_time_seconds": 259200, "cost": 400000, "resource": "Dark Elixir"}
+      }
+    }
+  }
+}
