@@ -172,7 +172,11 @@ def get_active_job_count() -> int:
     return len(scheduler.get_jobs())
 
 
-async def process_pending_broadcasts(bot: Bot) -> None:
+async def process_pending_broadcasts() -> None:
+    from bot.main import bot_instance as _bot
+    bot = _bot
+    if bot is None:
+        return
     async with async_session() as session:
         result = await session.execute(
             select(BroadcastMessage).where(BroadcastMessage.status == "pending")
