@@ -24,12 +24,29 @@ async def get_db():
         yield session
 
 
+async def _column_exists(conn, table: str, column: str) -> bool:
+    try:
+        result = await conn.execute(
+            text(
+                "SELECT column_name FROM information_schema.columns "
+                "WHERE table_name = :table AND column_name = :col"
+            ),
+            {"table": table, "col": column},
+        )
+        return result.scalar() is not None
+    except Exception:
+        return False
+
+
 async def _migrate_add_column(conn, table: str, column: str, col_type: str) -> None:
+    if await _column_exists(conn, table, column):
+        logger.info(f"Migration: column {table}.{column} already exists, skipping")
+        return
     try:
         await conn.execute(text(f"ALTER TABLE {table} ADD COLUMN {column} {col_type}"))
         logger.info(f"Migration: added column {table}.{column}")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.warning(f"Migration: failed to add {table}.{column}: {e}")
 
 
 async def init_db():
@@ -37,4 +54,4 @@ async def init_db():
         from database.models import User, ActiveUpgrade
         await conn.run_sync(Base.metadata.create_all)
         await _migrate_add_column(conn, "users", "buildings_snapshot", "TEXT")
-        await _migrate_add_column(conn, "active_upgrades", "village", "VARCHAR(32) DEFAULT 'home'")
+        await _migrate_add_column(conn, "active_upgrades", "village", "TEXT DEFAULT 'home'")
