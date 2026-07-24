@@ -85,7 +85,7 @@ async def main():
     async def health():
         return {"status": "ok"}
 
-    WEBHOOK_URL = os.getenv("WEBHOOK_URL")
+    WEBHOOK_URL = os.getenv("WEBHOOK_URL") or os.getenv("RENDER_EXTERNAL_URL")
     WEBHOOK_PATH = os.getenv("WEBHOOK_PATH", "/webhook")
 
     if WEBHOOK_URL:
@@ -93,7 +93,10 @@ async def main():
         from fastapi.responses import JSONResponse
 
         webhook_url = f"{WEBHOOK_URL.rstrip('/')}{WEBHOOK_PATH}"
-        await bot.set_webhook(url=webhook_url)
+        await bot.set_webhook(
+            url=webhook_url,
+            allowed_updates=["message", "callback_query"],
+        )
         logger.info(f"Webhook set to {webhook_url}")
 
         @main_app.post(WEBHOOK_PATH)
