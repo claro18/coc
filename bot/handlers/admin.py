@@ -3,7 +3,8 @@ import json as json_lib
 import os
 import logging
 from aiogram import Router, F
-from aiogram.types import Message, CallbackQuery
+from aiogram.filters import Command
+from aiogram.types import Message, CallbackQuery, InlineKeyboardMarkup
 from sqlalchemy import select, func
 
 from database.connection import async_session
@@ -26,15 +27,12 @@ def is_admin(user_id: int) -> bool:
     return user_id in ADMIN_IDS
 
 
-@admin_router.callback_query(F.data.in_({"menu:upgrades", "menu:builders"}))
-async def callback_upgrades(callback: CallbackQuery) -> None:
-    user_id = callback.from_user.id
+async def _upgrades_content(user_id: int) -> tuple[str, InlineKeyboardMarkup] | None:
     async with async_session() as session:
         result = await session.execute(select(User).where(User.id == user_id))
         user = result.scalar_one_or_none()
-        if not user:
-            await callback.answer("Please upload your village data first.", show_alert=True)
-            return
+        if not user or user.town_hall == 0:
+            return None
 
         result = await session.execute(
             select(ActiveUpgrade).where(
@@ -84,23 +82,18 @@ async def callback_upgrades(callback: CallbackQuery) -> None:
         remaining = int((upg.end_time.replace(tzinfo=None) - now).total_seconds())
         ts = format_duration(remaining) if remaining > 0 else "Completing..."
         if num is not None:
-            return f"  👷 Builder #{num}: <b>{upg.building_name}</b> → Lvl {upg.target_level} ({ts})"
-        return f"  🔬 <b>{upg.building_name}</b> → Lvl {upg.target_level} ({ts})"
+            return f"  👷 Builder #{num}: <b>{upg.building_name}</b> \u2192 Lvl {upg.target_level} ({ts})"
+        return f"  🔬 <b>{upg.building_name}</b> \u2192 Lvl {upg.target_level} ({ts})"
 
     if not active:
-        text = "📋 <b>Upgrades</b>\n\nNo upgrades in progress.\nAll builders are free!"
-        await callback.message.edit_text(text, parse_mode="HTML", reply_markup=back_to_menu())
-        await callback.answer()
-        return
+        return "📋 <b>Upgrades</b>\n\nNo upgrades in progress.\nAll builders are free!", back_to_menu()
 
     lines = ["📋 <b>Upgrades</b>\n"]
     builder_counter = 0
 
-    # ---- Home Village ----
     home_upgs = [u for u in active if u.village == "home"]
     if home_upgs:
         lines.append("── 🏰 Town Hall ──\n")
-
         h_build = [u for u in home_upgs if cat(u.building_name, "home") == "buildings"]
         h_lab   = [u for u in home_upgs if cat(u.building_name, "home") == "lab"]
         h_hero  = [u for u in home_upgs if cat(u.building_name, "home") == "heroes"]
@@ -137,11 +130,9 @@ async def callback_upgrades(callback: CallbackQuery) -> None:
                 lines.append(fmt(u, builder_counter))
             lines.append("")
 
-    # ---- Builder Base ----
     bb_upgs = [u for u in active if u.village == "builder_base"]
     if bb_upgs:
         lines.append("── 🏗️ Builder Base ──\n")
-
         bb_build = [u for u in bb_upgs if cat(u.building_name, "builder_base") == "buildings"]
         bb_lab   = [u for u in bb_upgs if cat(u.building_name, "builder_base") == "lab"]
         bb_hero  = [u for u in bb_upgs if cat(u.building_name, "builder_base") == "heroes"]
@@ -171,19 +162,15 @@ async def callback_upgrades(callback: CallbackQuery) -> None:
             lines.append("")
 
     text = "\n".join(lines).rstrip("\n")
-    await callback.message.edit_text(text, parse_mode="HTML", reply_markup=back_to_menu())
-    await callback.answer()
+    return text, back_to_menu()
 
 
-@admin_router.callback_query(F.data == "menu:stats")
-async def callback_stats(callback: CallbackQuery) -> None:
-    user_id = callback.from_user.id
+async def _stats_content(user_id: int) -> tuple[str, InlineKeyboardMarkup] | None:
     async with async_session() as session:
         result = await session.execute(select(User).where(User.id == user_id))
         user = result.scalar_one_or_none()
         if not user or user.town_hall == 0:
-            await callback.answer("No village data found. Upload a JSON file first.", show_alert=True)
-            return
+            return None
 
         result = await session.execute(
             select(ActiveUpgrade).where(ActiveUpgrade.user_id == user_id)
@@ -213,18 +200,10 @@ async def callback_stats(callback: CallbackQuery) -> None:
         f"📅 Last Sync: <b>{last_sync}</b>\n"
         f"🆔 User ID: <code>{user.id}</code>"
     )
-
-    await callback.message.edit_text(
-        text,
-        parse_mode="HTML",
-        reply_markup=back_to_menu(),
-    )
-    await callback.answer()
+    return text, back_to_menu()
 
 
-@admin_router.callback_query(F.data == "menu:history")
-async def callback_history(callback: CallbackQuery) -> None:
-    user_id = callback.from_user.id
+async def _history_content(user_id: int) -> tuple[str, InlineKeyboardMarkup]:
     async with async_session() as session:
         result = await session.execute(
             select(ActiveUpgrade).where(
@@ -245,25 +224,17 @@ async def callback_history(callback: CallbackQuery) -> None:
         for h in history:
             completed_at = h.end_time.strftime("%m/%d %H:%M")
             lines.append(
-                f"✅ <b>{h.building_name}</b> → Lvl {h.target_level} "
+                f"✅ <b>{h.building_name}</b> \u2192 Lvl {h.target_level} "
                 f"({completed_at})"
             )
         text = "\n".join(lines)
 
-    await callback.message.edit_text(
-        text,
-        parse_mode="HTML",
-        reply_markup=back_to_menu(),
-    )
-    await callback.answer()
+    return text, back_to_menu()
 
 
-@admin_router.callback_query(F.data == "admin:dashboard")
-async def callback_admin_dashboard(callback: CallbackQuery) -> None:
-    user_id = callback.from_user.id
+async def _admin_content(user_id: int) -> tuple[str, InlineKeyboardMarkup] | None:
     if not is_admin(user_id):
-        await callback.answer("Access denied.", show_alert=True)
-        return
+        return None
 
     async with async_session() as session:
         result = await session.execute(select(func.count(User.id)))
@@ -298,10 +269,89 @@ async def callback_admin_dashboard(callback: CallbackQuery) -> None:
         f"💾 Database: <b>Connected</b>\n\n"
         f"Use the Web App (button below) for the full dashboard."
     )
+    return text, admin_panel()
 
-    await callback.message.edit_text(
-        text,
-        parse_mode="HTML",
-        reply_markup=admin_panel(),
-    )
+
+@admin_router.callback_query(F.data.in_({"menu:upgrades", "menu:builders"}))
+async def callback_upgrades(callback: CallbackQuery) -> None:
+    result = await _upgrades_content(callback.from_user.id)
+    if result is None:
+        await callback.answer("Please upload your village data first.", show_alert=True)
+        return
+    text, markup = result
+    await callback.message.edit_text(text, parse_mode="HTML", reply_markup=markup)
     await callback.answer()
+
+
+@admin_router.message(Command("upgrades"))
+async def cmd_upgrades(message: Message) -> None:
+    result = await _upgrades_content(message.from_user.id)
+    if result is None:
+        await message.answer(
+            "No village data found. Use /import to upload your JSON file.",
+            reply_markup=back_to_menu(),
+        )
+        return
+    text, markup = result
+    await message.answer(text, parse_mode="HTML", reply_markup=markup)
+
+
+@admin_router.callback_query(F.data == "menu:stats")
+async def callback_stats(callback: CallbackQuery) -> None:
+    result = await _stats_content(callback.from_user.id)
+    if result is None:
+        await callback.answer("No village data found. Upload a JSON file first.", show_alert=True)
+        return
+    text, markup = result
+    await callback.message.edit_text(text, parse_mode="HTML", reply_markup=markup)
+    await callback.answer()
+
+
+@admin_router.message(Command("stats"))
+async def cmd_stats(message: Message) -> None:
+    result = await _stats_content(message.from_user.id)
+    if result is None:
+        await message.answer(
+            "No village data found. Use /import to upload your JSON file.",
+            reply_markup=back_to_menu(),
+        )
+        return
+    text, markup = result
+    await message.answer(text, parse_mode="HTML", reply_markup=markup)
+
+
+@admin_router.callback_query(F.data == "menu:history")
+async def callback_history(callback: CallbackQuery) -> None:
+    text, markup = await _history_content(callback.from_user.id)
+    await callback.message.edit_text(text, parse_mode="HTML", reply_markup=markup)
+    await callback.answer()
+
+
+@admin_router.message(Command("history"))
+async def cmd_history(message: Message) -> None:
+    text, markup = await _history_content(message.from_user.id)
+    await message.answer(text, parse_mode="HTML", reply_markup=markup)
+
+
+@admin_router.callback_query(F.data == "admin:dashboard")
+async def callback_admin_dashboard(callback: CallbackQuery) -> None:
+    result = await _admin_content(callback.from_user.id)
+    if result is None:
+        await callback.answer("Access denied.", show_alert=True)
+        return
+    text, markup = result
+    await callback.message.edit_text(text, parse_mode="HTML", reply_markup=markup)
+    await callback.answer()
+
+
+@admin_router.message(Command("admin"))
+async def cmd_admin(message: Message) -> None:
+    result = await _admin_content(message.from_user.id)
+    if result is None:
+        await message.answer(
+            "👑 <b>Admin Panel</b>\n\nAccess denied. You are not authorized.",
+            parse_mode="HTML",
+        )
+        return
+    text, markup = result
+    await message.answer(text, parse_mode="HTML", reply_markup=markup)

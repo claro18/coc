@@ -9,7 +9,7 @@ from sqlalchemy import select
 
 from database.connection import async_session
 from database.models import User, ActiveUpgrade
-from bot.keyboards.inline import main_menu, help_keyboard
+from bot.keyboards.inline import main_menu, help_keyboard, back_to_menu
 from bot.services.calculator import (
     calculate_th_progress,
     make_progress_bar,
@@ -179,3 +179,40 @@ async def callback_help(callback: CallbackQuery) -> None:
         reply_markup=help_keyboard(),
     )
     await callback.answer()
+
+
+@start_router.message(Command("help"))
+async def cmd_help(message: Message) -> None:
+    text = (
+        "⚙️ <b>How to Export Your Village Data</b>\n\n"
+        "1. Open <b>Clash of Clans</b>\n"
+        "2. Go to <b>Settings</b> (gear icon)\n"
+        "3. Tap <b>More Settings</b>\n"
+        "4. Scroll down to <b>Data Export</b>\n"
+        "5. Tap <b>Export Data</b>\n"
+        "6. Save the generated .json file\n"
+        "7. Upload it here as a document\n\n"
+        "The bot will automatically parse your village state and begin tracking all ongoing upgrades!\n\n"
+        "🔄 <b>Refresh:</b> Upload a new .json file anytime to sync latest progress.\n"
+        "🔔 <b>Notifications:</b> You'll be alerted when an upgrade completes."
+    )
+    await message.answer(
+        text,
+        parse_mode="HTML",
+        reply_markup=help_keyboard(),
+    )
+
+
+@start_router.message(Command("import"))
+async def cmd_import(message: Message) -> None:
+    await message.answer(
+        "📤 <b>Upload Your Village JSON</b>\n\n"
+        "Please send your <b>.json</b> data export file as a document.\n\n"
+        "How to get it:\n"
+        "1. Open Clash of Clans\n"
+        "2. <b>Settings → More Settings → Data Export</b>\n"
+        "3. Tap <b>Export Data</b>\n"
+        "4. Send the file here",
+        parse_mode="HTML",
+        reply_markup=back_to_menu(),
+    )

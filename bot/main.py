@@ -60,7 +60,21 @@ async def main():
     await load_pending_upgrades(bot)
     logger.info("Scheduler started with pending upgrades")
 
-    await bot.delete_webhook()
+    await bot.delete_webhook(drop_pending_updates=True)
+
+    from aiogram.types import BotCommand
+
+    await bot.set_my_commands([
+        BotCommand(command="start", description="🚀 Start the bot"),
+        BotCommand(command="menu", description="📋 Show main menu"),
+        BotCommand(command="upgrades", description="🔄 View active upgrades"),
+        BotCommand(command="stats", description="📊 View detailed statistics"),
+        BotCommand(command="history", description="📜 View upgrade history"),
+        BotCommand(command="help", description="❓ Help & instructions"),
+        BotCommand(command="import", description="📤 Import village JSON data"),
+        BotCommand(command="refresh", description="🔄 Refresh progress"),
+        BotCommand(command="admin", description="👑 Admin panel"),
+    ])
 
     from fastapi import FastAPI
     from fastapi.staticfiles import StaticFiles

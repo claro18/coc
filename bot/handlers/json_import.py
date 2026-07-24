@@ -4,7 +4,8 @@ import json as json_lib
 import logging
 import os
 from aiogram import Router, F
-from aiogram.types import Message, CallbackQuery, Document
+from aiogram.filters import Command
+from aiogram.types import Message, CallbackQuery, Document, InlineKeyboardMarkup
 from sqlalchemy import select
 
 from database.connection import async_session
@@ -222,9 +223,7 @@ async def handle_document(message: Message) -> None:
     )
 
 
-@json_router.callback_query(F.data == "menu:refresh")
-async def callback_refresh(callback: CallbackQuery) -> None:
-    user_id = callback.from_user.id
+async def _refresh_content(user_id: int) -> tuple[str, InlineKeyboardMarkup]:
     now = datetime.datetime.utcnow()
 
     async with async_session() as session:
@@ -258,11 +257,6 @@ async def callback_refresh(callback: CallbackQuery) -> None:
             "No active upgrades remaining.\n"
             "Upload a new .json file to track new upgrades!"
         )
-        await callback.message.edit_text(
-            text,
-            parse_mode="HTML",
-            reply_markup=refresh_prompt(),
-        )
     else:
         now = datetime.datetime.utcnow()
         earliest = min(still_active, key=lambda u: u.end_time)
@@ -276,13 +270,21 @@ async def callback_refresh(callback: CallbackQuery) -> None:
             f"({earliest.building_name} Lvl {earliest.target_level})\n\n"
             "Upload a new .json file to sync any newly started upgrades."
         )
-        await callback.message.edit_text(
-            text,
-            parse_mode="HTML",
-            reply_markup=refresh_prompt(),
-        )
 
+    return text, refresh_prompt()
+
+
+@json_router.callback_query(F.data == "menu:refresh")
+async def callback_refresh(callback: CallbackQuery) -> None:
+    text, markup = await _refresh_content(callback.from_user.id)
+    await callback.message.edit_text(text, parse_mode="HTML", reply_markup=markup)
     await callback.answer()
+
+
+@json_router.message(Command("refresh"))
+async def cmd_refresh(message: Message) -> None:
+    text, markup = await _refresh_content(message.from_user.id)
+    await message.answer(text, parse_mode="HTML", reply_markup=markup)
 
 
 @json_router.callback_query(F.data == "menu:upload_prompt")
